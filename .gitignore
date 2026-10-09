@@ -4,3 +4,5 @@ build/
 .idea/
 *.iml
 .env
+
+backend/boekenwinkel/src/main/resources/application.properties
