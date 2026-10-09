@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+# Database-instellingen met wachtwoorden
+backend/boekenwinkel/src/main/resources/application.properties
