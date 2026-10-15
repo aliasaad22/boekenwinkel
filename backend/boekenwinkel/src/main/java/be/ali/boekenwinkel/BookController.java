@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/books")
@@ -40,4 +41,15 @@ public class BookController {
     public Book createBook(@RequestBody Book book) {
         return bookService.saveBook(book);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Book> updateBook(
+            @PathVariable Long id,
+            @RequestBody Book updatedBook) {
+
+        return bookService.updateBook(id, updatedBook)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
