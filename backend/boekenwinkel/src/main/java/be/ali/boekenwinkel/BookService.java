@@ -41,4 +41,14 @@ public class BookService {
                 });
     }
 
+    public boolean deleteBook(Long id) {
+        if (!bookRepository.existsById(id)) {
+            return false;
+        }
+
+        bookRepository.deleteById(id);
+        return true;
+    }
+
+
 }
