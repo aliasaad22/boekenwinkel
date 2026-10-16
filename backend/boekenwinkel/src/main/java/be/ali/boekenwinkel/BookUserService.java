@@ -35,4 +35,21 @@ public class BookUserService {
     public boolean checkPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
+
+    public Optional<BookUser> login(String email, String rawPassword) {
+        Optional<BookUser> userOptional = bookUserRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        BookUser user = userOptional.get();
+
+        if (!checkPassword(rawPassword, user.getPassword())) {
+            return Optional.empty();
+        }
+
+        return Optional.of(user);
+    }
+
 }
