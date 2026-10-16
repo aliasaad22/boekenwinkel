@@ -18,6 +18,10 @@ public class BookUserService {
     }
 
     public BookUser saveUser(BookUser user) {
+        if (bookUserRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new EmailAlreadyExistsException();
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return bookUserRepository.save(user);
     }
