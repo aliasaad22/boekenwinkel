@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/users")
@@ -36,6 +37,20 @@ public class BookUserController {
             @RequestParam String email) {
 
         BookUser user = bookUserService.getUserByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Gebruiker niet gevonden."
+                ));
+
+        return new BookUserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
+    }
+    @GetMapping("/{id}")
+    public BookUserResponse getUserById(@PathVariable Long id) {
+        BookUser user = bookUserService.getUserById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Gebruiker niet gevonden."

@@ -29,4 +29,7 @@ public class BookUserService {
     public Optional<BookUser> getUserByEmail(String email) {
         return bookUserRepository.findByEmail(email);
     }
+    public Optional<BookUser> getUserById(Long id) {
+        return bookUserRepository.findById(id);
+    }
 }
