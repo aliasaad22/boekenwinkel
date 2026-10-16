@@ -32,4 +32,7 @@ public class BookUserService {
     public Optional<BookUser> getUserById(Long id) {
         return bookUserRepository.findById(id);
     }
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
 }
