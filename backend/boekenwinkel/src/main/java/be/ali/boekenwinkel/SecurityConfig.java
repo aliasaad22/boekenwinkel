@@ -14,8 +14,14 @@ public class SecurityConfig {
             throws Exception {
 
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/books", "/books/**").permitAll()
+                        .requestMatchers(
+                                "/books",
+                                "/books/**",
+                                "/users",
+                                "/users/login"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 );
 

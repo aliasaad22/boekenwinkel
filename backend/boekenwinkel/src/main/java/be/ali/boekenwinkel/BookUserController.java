@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.PathVariable;
 
+
 @RestController
 @RequestMapping("/users")
 public class BookUserController {
@@ -60,6 +61,22 @@ public class BookUserController {
                 user.getId(),
                 user.getName(),
                 user.getEmail()
+        );
+    }
+    @PostMapping("/login")
+    public BookUserResponse login(@RequestBody BookUser user) {
+        BookUser loggedInUser = bookUserService.login(
+                user.getEmail(),
+                user.getPassword()
+        ).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED,
+                "E-mailadres of wachtwoord is onjuist."
+        ));
+
+        return new BookUserResponse(
+                loggedInUser.getId(),
+                loggedInUser.getName(),
+                loggedInUser.getEmail()
         );
     }
 }
