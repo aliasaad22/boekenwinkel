@@ -16,15 +16,20 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
+
                         .requestMatchers(
                                 "/books",
                                 "/books/**",
                                 "/users",
-                                "/users/login"
+                                "/users/login",
+                                "/reservations",
+                                "/reservations/**"
                         ).permitAll()
                         .anyRequest().authenticated()
+
                 );
 
         return http.build();
     }
+
 }
