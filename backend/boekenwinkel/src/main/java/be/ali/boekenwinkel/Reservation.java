@@ -16,6 +16,7 @@ public class Reservation {
     private Long userId;
 
     private Long bookId;
+    private String status = "PENDING";
 
     public Reservation() {
     }
@@ -38,5 +39,13 @@ public class Reservation {
 
     public void setBookId(Long bookId) {
         this.bookId = bookId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

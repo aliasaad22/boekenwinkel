@@ -23,4 +23,10 @@ public class ReservationController {
                 request.bookId()
         );
     }
+
+    @org.springframework.web.bind.annotation.PutMapping("/{id}/confirm")
+    public Reservation confirmReservation(@org.springframework.web.bind.annotation.PathVariable Long id) {
+        return reservationService.confirmReservation(id);
+    }
+
 }

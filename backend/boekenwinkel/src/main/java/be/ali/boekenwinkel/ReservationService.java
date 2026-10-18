@@ -36,9 +36,6 @@ public class ReservationService {
 
 
 
-        book.setStock(book.getStock() - 1);
-        bookRepository.save(book);
-
         Reservation reservation = new Reservation();
         reservation.setUserId(userId);
         reservation.setBookId(bookId);
@@ -46,4 +43,39 @@ public class ReservationService {
         return reservationRepository.save(reservation);
 
     }
+
+    public Reservation confirmReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Reservering niet gevonden."
+                ));
+
+        if (!"PENDING".equals(reservation.getStatus())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Deze reservering is al verwerkt."
+            );
+        }
+
+        Book book = bookRepository.findById(reservation.getBookId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Boek niet gevonden."
+                ));
+
+        if (book.getStock() <= 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Dit boek is niet op voorraad."
+            );
+        }
+
+        book.setStock(book.getStock() - 1);
+        bookRepository.save(book);
+
+        reservation.setStatus("CONFIRMED");
+        return reservationRepository.save(reservation);
+    }
+
 }

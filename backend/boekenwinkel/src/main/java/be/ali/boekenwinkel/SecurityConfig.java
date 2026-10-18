@@ -15,19 +15,14 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+
                 .authorizeHttpRequests(authorize -> authorize
-
-                        .requestMatchers(
-                                "/books",
-                                "/books/**",
-                                "/users",
-                                "/users/login",
-                                "/reservations",
-                                "/reservations/**"
-                        ).permitAll()
+                        .requestMatchers("/books", "/books/**").permitAll()
+                        .requestMatchers("/users", "/users/login").permitAll()
+                        .requestMatchers("/reservations", "/reservations/**").permitAll()
                         .anyRequest().authenticated()
-
                 );
+
 
         return http.build();
     }
