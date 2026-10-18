@@ -18,7 +18,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/books", "/books/**").permitAll()
-                        .requestMatchers("/users", "/users/login").permitAll()
+                        .requestMatchers("/users", "/users/**").permitAll()
                         .requestMatchers("/reservations", "/reservations/**").permitAll()
                         .anyRequest().authenticated()
                 );

@@ -79,4 +79,10 @@ public class BookUserController {
                 loggedInUser.getEmail()
         );
     }
+
+    @GetMapping("/{id}/profile")
+    public UserProfileResponse getUserProfile(@PathVariable Long id) {
+        return bookUserService.getUserProfile(id);
+    }
+
 }
