@@ -18,6 +18,13 @@ public class Reservation {
     private Long bookId;
     private String status = "PENDING";
 
+    @jakarta.persistence.PrePersist
+    public void setDefaultStatus() {
+        if (status == null) {
+            status = "PENDING";
+        }
+    }
+
     public Reservation() {
     }
 

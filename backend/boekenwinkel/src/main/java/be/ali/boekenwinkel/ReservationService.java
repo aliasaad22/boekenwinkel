@@ -4,7 +4,7 @@ package be.ali.boekenwinkel;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
-
+import java.util.List;
 
 @Service
 public class ReservationService {
@@ -76,6 +76,9 @@ public class ReservationService {
 
         reservation.setStatus("CONFIRMED");
         return reservationRepository.save(reservation);
+    }
+    public List<Reservation> getAllReservations() {
+        return reservationRepository.findAll();
     }
 
 }
