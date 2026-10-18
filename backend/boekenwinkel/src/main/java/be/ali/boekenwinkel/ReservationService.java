@@ -4,6 +4,7 @@ package be.ali.boekenwinkel;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+
 import java.util.List;
 
 @Service
@@ -19,8 +20,11 @@ public class ReservationService {
         this.bookRepository = bookRepository;
     }
 
-    public Reservation createReservation(Long userId, Long bookId) {
-
+    public Reservation createReservation(
+            Long userId,
+            Long bookId,
+            String pickupDate
+    ) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
@@ -34,14 +38,12 @@ public class ReservationService {
             );
         }
 
-
-
         Reservation reservation = new Reservation();
         reservation.setUserId(userId);
         reservation.setBookId(bookId);
+        reservation.setPickupDate(pickupDate);
 
         return reservationRepository.save(reservation);
-
     }
 
     public Reservation confirmReservation(Long reservationId) {
@@ -77,8 +79,8 @@ public class ReservationService {
         reservation.setStatus("CONFIRMED");
         return reservationRepository.save(reservation);
     }
+
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
     }
-
 }

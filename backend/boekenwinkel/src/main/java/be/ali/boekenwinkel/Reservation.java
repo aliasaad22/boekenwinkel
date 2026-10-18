@@ -17,6 +17,8 @@ public class Reservation {
 
     private Long bookId;
     private String status = "PENDING";
+    private String pickupDate;
+    private String paymentStatus = "NOT_PAID";
 
     @jakarta.persistence.PrePersist
     public void setDefaultStatus() {
@@ -54,5 +56,20 @@ public class Reservation {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    public String getPickupDate() {
+        return pickupDate;
+    }
+
+    public void setPickupDate(String pickupDate) {
+        this.pickupDate = pickupDate;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 }

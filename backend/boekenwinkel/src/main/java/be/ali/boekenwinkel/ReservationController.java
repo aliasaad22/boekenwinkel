@@ -1,12 +1,16 @@
 
 package be.ali.boekenwinkel;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
+
 @RestController
 @RequestMapping("/reservations")
 public class ReservationController {
@@ -18,20 +22,23 @@ public class ReservationController {
     }
 
     @PostMapping
-    public Reservation createReservation(@RequestBody ReservationRequest request) {
+    public Reservation createReservation(
+            @RequestBody ReservationRequest request) {
+
         return reservationService.createReservation(
                 request.userId(),
-                request.bookId()
+                request.bookId(),
+                request.pickupDate()
         );
     }
 
-    @org.springframework.web.bind.annotation.PutMapping("/{id}/confirm")
-    public Reservation confirmReservation(@org.springframework.web.bind.annotation.PathVariable Long id) {
+    @PutMapping("/{id}/confirm")
+    public Reservation confirmReservation(@PathVariable Long id) {
         return reservationService.confirmReservation(id);
     }
+
     @GetMapping
     public List<Reservation> getAllReservations() {
         return reservationService.getAllReservations();
     }
-
 }
