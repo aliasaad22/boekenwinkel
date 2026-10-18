@@ -83,4 +83,24 @@ public class ReservationService {
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
     }
+
+    public Reservation markAsPaid(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Reservering niet gevonden."
+                ));
+
+        if (!"CONFIRMED".equals(reservation.getStatus())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Alleen bevestigde reserveringen kunnen betaald worden."
+            );
+        }
+
+        reservation.setPaymentStatus("PAID");
+
+        return reservationRepository.save(reservation);
+    }
+
 }

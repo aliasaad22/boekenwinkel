@@ -41,4 +41,10 @@ public class ReservationController {
     public List<Reservation> getAllReservations() {
         return reservationService.getAllReservations();
     }
+
+    @PutMapping("/{id}/pay")
+    public Reservation markAsPaid(@PathVariable Long id) {
+        return reservationService.markAsPaid(id);
+    }
+
 }
