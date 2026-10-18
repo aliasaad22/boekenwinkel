@@ -9,20 +9,25 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class BookUserService {
 
     private final BookUserRepository bookUserRepository;
     private final ReservationRepository reservationRepository;
+    private final BookRepository bookRepository;
+
     private final PasswordEncoder passwordEncoder =
             new BCryptPasswordEncoder();
 
     public BookUserService(
             BookUserRepository bookUserRepository,
-            ReservationRepository reservationRepository) {
+            ReservationRepository reservationRepository,
+            BookRepository bookRepository) {
         this.bookUserRepository = bookUserRepository;
         this.reservationRepository = reservationRepository;
+        this.bookRepository = bookRepository;
     }
 
     public BookUser saveUser(BookUser user) {
@@ -83,5 +88,38 @@ public class BookUserService {
                 user.getEmail(),
                 reservations
         );
+    }
+
+    public List<PurchasedBookResponse> getPurchasedBooks(Long userId) {
+        getUserById(userId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Gebruiker niet gevonden."
+                ));
+
+        List<Reservation> paidReservations =
+                reservationRepository.findByUserIdAndPaymentStatus(
+                        userId,
+                        "PAID"
+                );
+
+        List<PurchasedBookResponse> purchasedBooks = new ArrayList<>();
+
+        for (Reservation reservation : paidReservations) {
+            Book book = bookRepository.findById(reservation.getBookId())
+                    .orElse(null);
+
+            if (book != null) {
+                purchasedBooks.add(new PurchasedBookResponse(
+                        reservation.getId(),
+                        book.getId(),
+                        book.getTitle(),
+                        book.getAuthors(),
+                        book.getPrice()
+                ));
+            }
+        }
+
+        return purchasedBooks;
     }
 }

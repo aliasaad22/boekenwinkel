@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -84,5 +85,12 @@ public class BookUserController {
     public UserProfileResponse getUserProfile(@PathVariable Long id) {
         return bookUserService.getUserProfile(id);
     }
+
+    @GetMapping("/{id}/purchased-books")
+    public List<PurchasedBookResponse> getPurchasedBooks(
+            @PathVariable Long id) {
+        return bookUserService.getPurchasedBooks(id);
+    }
+
 
 }
