@@ -13,4 +13,11 @@ public interface ReservationRepository
             Long userId,
             String paymentStatus
     );
+
+    boolean existsByUserIdAndBookIdAndPaymentStatus(
+            Long userId,
+            Long bookId,
+            String paymentStatus
+    );
+
 }

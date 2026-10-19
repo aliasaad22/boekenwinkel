@@ -20,6 +20,7 @@ public class SecurityConfig {
                         .requestMatchers("/books", "/books/**").permitAll()
                         .requestMatchers("/users", "/users/**").permitAll()
                         .requestMatchers("/reservations", "/reservations/**").permitAll()
+                        .requestMatchers("/reviews", "/reviews/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
