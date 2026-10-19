@@ -72,6 +72,21 @@ public class ReviewService {
         }
 
 
+
+        boolean alreadyReviewed =
+                reviewRepository.existsByUserIdAndBookId(
+                        review.getUserId(),
+                        review.getBookId()
+                );
+
+        if (alreadyReviewed) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Je hebt al een review voor dit boek geplaatst."
+            );
+        }
+
+
         return reviewRepository.save(review);
     }
 }
