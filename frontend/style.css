@@ -1,4 +1,38 @@
 
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #222;
+}
+
+header {
+    background-color: #17324d;
+    color: white;
+    padding: 24px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 24px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+main h2 {
+    color: #17324d;
+}
+
 #boeken {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -12,6 +46,12 @@
     border: 1px solid #e0e5eb;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.boek-kaart:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
 }
 
 .boek-kaart h3 {
@@ -27,4 +67,19 @@
     font-weight: bold;
     color: #0c5679;
     font-size: 18px;
+}
+
+@media (max-width: 600px) {
+    main {
+        margin: 20px 12px;
+        padding: 16px;
+    }
+
+    header {
+        padding: 20px;
+    }
+
+    .boek-kaart {
+        padding: 18px;
+    }
 }
