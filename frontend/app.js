@@ -1,4 +1,3 @@
-
 const boekenContainer = document.querySelector("#boeken");
 const boekDetails = document.querySelector("#boek-details");
 const detailsInhoud = document.querySelector("#details-inhoud");
@@ -32,6 +31,9 @@ async function laadBoeken() {
             const prijs = document.createElement("p");
             prijs.textContent = "Prijs: €" + boek.price;
 
+            const voorraad = document.createElement("p");
+            voorraad.textContent = "Voorraad: " + boek.stock;
+
             const detailsKnop = document.createElement("button");
             detailsKnop.textContent = "Bekijk details";
             detailsKnop.classList.add("details-knop");
@@ -54,6 +56,9 @@ async function laadBoeken() {
                 const prijsDetail = document.createElement("p");
                 prijsDetail.textContent = "Prijs: €" + boek.price;
 
+                const voorraadDetail = document.createElement("p");
+                voorraadDetail.textContent = "Voorraad: " + boek.stock;
+
                 const isbnDetail = document.createElement("p");
                 isbnDetail.textContent = "ISBN: " + boek.isbn;
 
@@ -61,6 +66,7 @@ async function laadBoeken() {
                 detailsInhoud.appendChild(auteursDetail);
                 detailsInhoud.appendChild(beschrijvingDetail);
                 detailsInhoud.appendChild(prijsDetail);
+                detailsInhoud.appendChild(voorraadDetail);
                 detailsInhoud.appendChild(isbnDetail);
             });
 
@@ -68,6 +74,7 @@ async function laadBoeken() {
             boekKaart.appendChild(auteurs);
             boekKaart.appendChild(beschrijving);
             boekKaart.appendChild(prijs);
+            boekKaart.appendChild(voorraad);
             boekKaart.appendChild(detailsKnop);
 
             boekenContainer.appendChild(boekKaart);
@@ -77,6 +84,7 @@ async function laadBoeken() {
         boekenContainer.textContent =
             "De boeken konden niet worden geladen.";
     }
+
 }
 
 terugKnop.addEventListener("click", function () {
