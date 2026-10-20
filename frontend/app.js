@@ -1,5 +1,8 @@
 
 const boekenContainer = document.querySelector("#boeken");
+const boekDetails = document.querySelector("#boek-details");
+const detailsInhoud = document.querySelector("#details-inhoud");
+const terugKnop = document.querySelector("#terug-knop");
 
 async function laadBoeken() {
     try {
@@ -34,15 +37,32 @@ async function laadBoeken() {
             detailsKnop.classList.add("details-knop");
 
             detailsKnop.addEventListener("click", function () {
-                alert(
-                    "Boek: " + boek.title + "\n" +
-                    "Auteur: " + boek.authors + "\n" +
-                    "Beschrijving: " + boek.description + "\n" +
-                    "Prijs: €" + boek.price + "\n" +
-                    "ISBN: " + boek.isbn
-                );
-            });
+                boekenContainer.hidden = true;
+                boekDetails.hidden = false;
 
+                detailsInhoud.innerHTML = "";
+
+                const titelDetail = document.createElement("h3");
+                titelDetail.textContent = boek.title;
+
+                const auteursDetail = document.createElement("p");
+                auteursDetail.textContent = "Auteur: " + boek.authors;
+
+                const beschrijvingDetail = document.createElement("p");
+                beschrijvingDetail.textContent = boek.description;
+
+                const prijsDetail = document.createElement("p");
+                prijsDetail.textContent = "Prijs: €" + boek.price;
+
+                const isbnDetail = document.createElement("p");
+                isbnDetail.textContent = "ISBN: " + boek.isbn;
+
+                detailsInhoud.appendChild(titelDetail);
+                detailsInhoud.appendChild(auteursDetail);
+                detailsInhoud.appendChild(beschrijvingDetail);
+                detailsInhoud.appendChild(prijsDetail);
+                detailsInhoud.appendChild(isbnDetail);
+            });
 
             boekKaart.appendChild(titel);
             boekKaart.appendChild(auteurs);
@@ -58,5 +78,10 @@ async function laadBoeken() {
             "De boeken konden niet worden geladen.";
     }
 }
+
+terugKnop.addEventListener("click", function () {
+    boekDetails.hidden = true;
+    boekenContainer.hidden = false;
+});
 
 laadBoeken();
