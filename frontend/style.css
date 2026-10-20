@@ -83,3 +83,26 @@ main h2 {
         padding: 18px;
     }
 }
+
+#details-inhoud h4 {
+    margin-top: 24px;
+    color: #17324d;
+}
+
+.review-kaart {
+    background-color: #f4f6f8;
+    border: 1px solid #e0e5eb;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.review-kaart p {
+    line-height: 1.6;
+    margin: 6px 0;
+}
+
+.review-score {
+    font-weight: bold;
+    color: #0c5679;
+}

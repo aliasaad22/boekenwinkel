@@ -50,6 +50,13 @@ async function laadBoeken() {
             const detailsKnop = document.createElement("button");
             detailsKnop.textContent = "Bekijk details";
             detailsKnop.classList.add("details-knop");
+            const scoreDetail = document.createElement("p");
+            scoreDetail.textContent = "Gemiddelde score: laden...";
+            const reviewsTitel = document.createElement("h4");
+            reviewsTitel.textContent = "Reviews";
+
+            const reviewsContainer = document.createElement("div");
+            reviewsContainer.textContent = "Reviews laden...";
 
             detailsKnop.addEventListener("click", async function () {
                 boekenContainer.hidden = true;
@@ -85,10 +92,46 @@ async function laadBoeken() {
                 detailsInhoud.appendChild(voorraadDetail);
                 detailsInhoud.appendChild(isbnDetail);
                 detailsInhoud.appendChild(scoreDetail);
-
+                detailsInhoud.appendChild(scoreDetail);
+                detailsInhoud.appendChild(reviewsTitel);
+                detailsInhoud.appendChild(reviewsContainer);
                 try {
                     const score = await laadGemiddeldeScore(boek.id);
                     scoreDetail.textContent = "Gemiddelde score: " + score;
+
+                    const reviewsResponse = await fetch(
+                        "http://localhost:8080/reviews/book/" + boek.id
+                    );
+
+                    if (!reviewsResponse.ok) {
+                        throw new Error("Reviews ophalen is mislukt.");
+                    }
+
+                    const reviews = await reviewsResponse.json();
+
+                    reviewsContainer.innerHTML = "";
+
+                    if (reviews.length === 0) {
+                        reviewsContainer.textContent = "Er zijn nog geen reviews.";
+                    } else {
+                        reviews.forEach(function (review) {
+                            const reviewKaart = document.createElement("article");
+                            reviewKaart.classList.add("review-kaart");
+
+                            const reviewScore = document.createElement("p");
+                            reviewScore.classList.add("review-score");
+                            reviewScore.textContent = "Score: " + review.score + "/5";
+
+                            const reviewTekst = document.createElement("p");
+                            reviewTekst.textContent = review.text;
+
+                            reviewKaart.appendChild(reviewScore);
+                            reviewKaart.appendChild(reviewTekst);
+
+                            reviewsContainer.appendChild(reviewKaart);
+                        });
+                    }
+
                 } catch (error) {
                     console.error(
                         "Fout bij het ophalen van de gemiddelde score:",
