@@ -98,4 +98,14 @@ public class ReviewService {
                 .average()
                 .orElse(0.0);
     }
+    public void verwijderReview(Long id) {
+        if (!reviewRepository.existsById(id)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Review niet gevonden."
+            );
+        }
+
+        reviewRepository.deleteById(id);
+    }
 }

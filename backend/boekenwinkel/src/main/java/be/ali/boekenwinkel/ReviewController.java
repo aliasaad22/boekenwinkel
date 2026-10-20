@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 
 @RestController
 @RequestMapping("/reviews")
@@ -49,5 +51,9 @@ public class ReviewController {
     @GetMapping("/book/{bookId}/average")
     public double getAverageScoreByBookId(@PathVariable Long bookId) {
         return reviewService.getAverageScoreByBookId(bookId);
+    }
+    @DeleteMapping("/{id}")
+    public void verwijderReview(@PathVariable Long id) {
+        reviewService.verwijderReview(id);
     }
 }
