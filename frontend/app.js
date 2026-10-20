@@ -3,6 +3,19 @@ const boekDetails = document.querySelector("#boek-details");
 const detailsInhoud = document.querySelector("#details-inhoud");
 const terugKnop = document.querySelector("#terug-knop");
 
+async function laadGemiddeldeScore(boekId) {
+    const response = await fetch(
+        "http://localhost:8080/reviews/book/" + boekId + "/average"
+    );
+
+    if (!response.ok) {
+        throw new Error("Gemiddelde reviewscore ophalen is mislukt.");
+    }
+
+    return await response.json();
+
+}
+
 async function laadBoeken() {
     try {
         const response = await fetch("http://localhost:8080/books");
@@ -38,7 +51,7 @@ async function laadBoeken() {
             detailsKnop.textContent = "Bekijk details";
             detailsKnop.classList.add("details-knop");
 
-            detailsKnop.addEventListener("click", function () {
+            detailsKnop.addEventListener("click", async function () {
                 boekenContainer.hidden = true;
                 boekDetails.hidden = false;
 
@@ -62,12 +75,29 @@ async function laadBoeken() {
                 const isbnDetail = document.createElement("p");
                 isbnDetail.textContent = "ISBN: " + boek.isbn;
 
+                const scoreDetail = document.createElement("p");
+                scoreDetail.textContent = "Gemiddelde score: laden...";
+
                 detailsInhoud.appendChild(titelDetail);
                 detailsInhoud.appendChild(auteursDetail);
                 detailsInhoud.appendChild(beschrijvingDetail);
                 detailsInhoud.appendChild(prijsDetail);
                 detailsInhoud.appendChild(voorraadDetail);
                 detailsInhoud.appendChild(isbnDetail);
+                detailsInhoud.appendChild(scoreDetail);
+
+                try {
+                    const score = await laadGemiddeldeScore(boek.id);
+                    scoreDetail.textContent = "Gemiddelde score: " + score;
+                } catch (error) {
+                    console.error(
+                        "Fout bij het ophalen van de gemiddelde score:",
+                        error
+                    );
+
+                    scoreDetail.textContent =
+                        "Gemiddelde score niet beschikbaar.";
+                }
             });
 
             boekKaart.appendChild(titel);
