@@ -165,4 +165,40 @@ terugKnop.addEventListener("click", function () {
     boekenContainer.hidden = false;
 });
 
+const registratieFormulier = document.querySelector("#registratie-formulier");
+const registratieBericht = document.querySelector("#registratie-bericht");
+registratieBericht.textContent = "";
+
+registratieFormulier.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const gebruiker = {
+        name: document.querySelector("#registratie-naam").value,
+        email: document.querySelector("#registratie-email").value,
+        password: document.querySelector("#registratie-wachtwoord").value
+    };
+
+    try {
+        const response = await fetch("http://localhost:8080/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(gebruiker)
+        });
+
+        if (!response.ok) {
+            throw new Error("Registratie is mislukt. Controleer de gegevens.");
+        }
+
+        registratieBericht.textContent = "Je account is aangemaakt!";
+
+        registratieFormulier.reset();
+    } catch (error) {
+        console.error("Fout bij registratie:", error);
+        registratieBericht.textContent = error.message;
+    }
+})
+
+
 laadBoeken();
