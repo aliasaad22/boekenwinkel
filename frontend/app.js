@@ -33,6 +33,17 @@ async function laadBoeken() {
             detailsKnop.textContent = "Bekijk details";
             detailsKnop.classList.add("details-knop");
 
+            detailsKnop.addEventListener("click", function () {
+                alert(
+                    "Boek: " + boek.title + "\n" +
+                    "Auteur: " + boek.authors + "\n" +
+                    "Beschrijving: " + boek.description + "\n" +
+                    "Prijs: €" + boek.price + "\n" +
+                    "ISBN: " + boek.isbn
+                );
+            });
+
+
             boekKaart.appendChild(titel);
             boekKaart.appendChild(auteurs);
             boekKaart.appendChild(beschrijving);
