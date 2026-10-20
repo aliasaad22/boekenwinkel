@@ -201,4 +201,39 @@ registratieFormulier.addEventListener("submit", async function (event) {
 })
 
 
+
+const loginFormulier = document.querySelector("#login-formulier");
+const loginBericht = document.querySelector("#login-bericht");
+
+loginBericht.textContent = "";
+
+loginFormulier.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const gebruiker = {
+        email: document.querySelector("#login-email").value,
+        password: document.querySelector("#login-wachtwoord").value
+    };
+
+    try {
+        const response = await fetch("http://localhost:8080/users/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(gebruiker)
+        });
+
+        if (!response.ok) {
+            throw new Error("Inloggen mislukt. Controleer je e-mailadres en wachtwoord.");
+        }
+
+        loginBericht.textContent = "Je bent succesvol ingelogd!";
+
+    } catch (error) {
+        console.error("Fout bij inloggen:", error);
+        loginBericht.textContent = error.message;
+    }
+});
+
 laadBoeken();
