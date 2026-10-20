@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+
 import java.util.List;
 
 @Service
@@ -88,5 +89,13 @@ public class ReviewService {
 
 
         return reviewRepository.save(review);
+    }
+    public double getAverageScoreByBookId(Long bookId) {
+        List<Review> reviews = reviewRepository.findByBookId(bookId);
+
+        return reviews.stream()
+                .mapToInt(Review::getScore)
+                .average()
+                .orElse(0.0);
     }
 }

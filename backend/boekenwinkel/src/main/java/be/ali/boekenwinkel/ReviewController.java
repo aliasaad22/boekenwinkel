@@ -46,4 +46,8 @@ public class ReviewController {
                 savedReview.getText()
         );
     }
+    @GetMapping("/book/{bookId}/average")
+    public double getAverageScoreByBookId(@PathVariable Long bookId) {
+        return reviewService.getAverageScoreByBookId(bookId);
+    }
 }
