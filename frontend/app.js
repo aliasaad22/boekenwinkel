@@ -29,10 +29,15 @@ async function laadBoeken() {
             const prijs = document.createElement("p");
             prijs.textContent = "Prijs: €" + boek.price;
 
+            const detailsKnop = document.createElement("button");
+            detailsKnop.textContent = "Bekijk details";
+            detailsKnop.classList.add("details-knop");
+
             boekKaart.appendChild(titel);
             boekKaart.appendChild(auteurs);
             boekKaart.appendChild(beschrijving);
             boekKaart.appendChild(prijs);
+            boekKaart.appendChild(detailsKnop);
 
             boekenContainer.appendChild(boekKaart);
         });
