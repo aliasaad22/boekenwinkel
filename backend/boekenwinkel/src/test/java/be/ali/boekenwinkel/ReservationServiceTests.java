@@ -11,7 +11,6 @@ class ReservationServiceTests {
 
     @Test
     void bevestigenVanReserveringZonderVoorraadGeeftConflict() {
-
         ReservationRepository reservationRepository =
                 mock(ReservationRepository.class);
         BookRepository bookRepository =
@@ -23,7 +22,6 @@ class ReservationServiceTests {
                         bookRepository
                 );
 
-
         Reservation reservation = new Reservation();
         reservation.setBookId(1L);
         reservation.setStatus("PENDING");
@@ -31,22 +29,18 @@ class ReservationServiceTests {
         when(reservationRepository.findById(1L))
                 .thenReturn(java.util.Optional.of(reservation));
 
-
         Book book = new Book();
         book.setStock(0);
 
         when(bookRepository.findById(1L))
                 .thenReturn(java.util.Optional.of(book));
 
-        // Bevestigen moet een conflict opleveren.
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
                 () -> reservationService.confirmReservation(1L)
         );
 
         assertEquals(409, exception.getStatusCode().value());
-
-        // De voorraad mag niet opgeslagen worden.
         verify(bookRepository, never()).save(any(Book.class));
     }
 
@@ -80,6 +74,7 @@ class ReservationServiceTests {
         verify(reservationRepository, never())
                 .save(any(Reservation.class));
     }
+
     @Test
     void bevestigenVanReserveringMetVoorraadWerkt() {
         ReservationRepository reservationRepository =
@@ -112,7 +107,8 @@ class ReservationServiceTests {
         when(bookRepository.save(any(Book.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Reservation result = reservationService.confirmReservation(1L);
+        Reservation result =
+                reservationService.confirmReservation(1L);
 
         assertEquals("CONFIRMED", result.getStatus());
         assertEquals(4, book.getStock());
@@ -120,6 +116,7 @@ class ReservationServiceTests {
         verify(bookRepository).save(book);
         verify(reservationRepository).save(reservation);
     }
+
     @Test
     void bevestigdeReserveringKanNietOpnieuwBevestigdWorden() {
         ReservationRepository reservationRepository =
@@ -149,7 +146,7 @@ class ReservationServiceTests {
 
         verify(bookRepository, never()).findById(1L);
         verify(bookRepository, never()).save(any(Book.class));
-        verify(reservationRepository, never()).save(any(Reservation.class));
+        verify(reservationRepository, never())
+                .save(any(Reservation.class));
     }
-
 }
