@@ -120,5 +120,36 @@ class ReservationServiceTests {
         verify(bookRepository).save(book);
         verify(reservationRepository).save(reservation);
     }
+    @Test
+    void bevestigdeReserveringKanNietOpnieuwBevestigdWorden() {
+        ReservationRepository reservationRepository =
+                mock(ReservationRepository.class);
+        BookRepository bookRepository =
+                mock(BookRepository.class);
+
+        ReservationService reservationService =
+                new ReservationService(
+                        reservationRepository,
+                        bookRepository
+                );
+
+        Reservation reservation = new Reservation();
+        reservation.setBookId(1L);
+        reservation.setStatus("CONFIRMED");
+
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
+
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> reservationService.confirmReservation(1L)
+        );
+
+        assertEquals(409, exception.getStatusCode().value());
+
+        verify(bookRepository, never()).findById(1L);
+        verify(bookRepository, never()).save(any(Book.class));
+        verify(reservationRepository, never()).save(any(Reservation.class));
+    }
 
 }
