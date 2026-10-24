@@ -602,18 +602,39 @@ reserveringenLadenKnop.addEventListener("click", async function () {
             return;
         }
 
-        reserveringen.forEach(function (reservering) {
+
+        for (const reservering of reserveringen) {
             const reserveringElement = document.createElement("p");
 
             reserveringElement.textContent =
                 "Reservering #" + reservering.id +
-                " | Boek: " + reservering.bookId +
+                " | Boek-ID: " + reservering.bookId +
                 " | Ophaaldatum: " + reservering.pickupDate +
                 " | Status: " + reservering.status +
                 " | Betaling: " + reservering.paymentStatus;
 
             mijnReserveringen.appendChild(reserveringElement);
-        });
+
+            try {
+                const antwoord = await fetch(
+                    "http://localhost:8080/books/" + reservering.bookId
+                );
+
+                if (antwoord.ok) {
+                    const boek = await antwoord.json();
+
+                    reserveringElement.textContent =
+                        "Reservering #" + reservering.id +
+                        " | Boek: " + boek.title +
+                        " | Ophaaldatum: " + reservering.pickupDate +
+                        " | Status: " + reservering.status +
+                        " | Betaling: " + reservering.paymentStatus;
+                }
+            } catch (fout) {
+                console.error("Boektitel ophalen mislukt:", fout);
+            }
+        }
+
 
     } catch (error) {
         mijnReserveringenBericht.textContent =
