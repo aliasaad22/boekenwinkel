@@ -99,6 +99,13 @@ public class ReservationService {
             );
         }
 
+        if ("PAID".equals(reservation.getPaymentStatus())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Deze reservering is al betaald."
+            );
+        }
+
         reservation.setPaymentStatus("PAID");
 
         return reservationRepository.save(reservation);
