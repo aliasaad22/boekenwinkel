@@ -1,8 +1,19 @@
+
 const boekenContainer = document.querySelector("#boeken");
 const boekDetails = document.querySelector("#boek-details");
 const detailsInhoud = document.querySelector("#details-inhoud");
 const terugKnop = document.querySelector("#terug-knop");
 
+const registratieFormulier = document.querySelector("#registratie-formulier");
+const registratieBericht = document.querySelector("#registratie-bericht");
+
+const loginFormulier = document.querySelector("#login-formulier");
+const loginBericht = document.querySelector("#login-bericht");
+
+const gebruikerStatus = document.querySelector("#gebruiker-status");
+const uitlogKnop = document.querySelector("#uitlog-knop");
+
+// Gemiddelde reviewscore ophalen
 async function laadGemiddeldeScore(boekId) {
     const response = await fetch(
         "http://localhost:8080/reviews/book/" + boekId + "/average"
@@ -13,9 +24,9 @@ async function laadGemiddeldeScore(boekId) {
     }
 
     return await response.json();
-
 }
 
+// Alle boeken ophalen en tonen
 async function laadBoeken() {
     try {
         const response = await fetch("http://localhost:8080/books");
@@ -50,18 +61,11 @@ async function laadBoeken() {
             const detailsKnop = document.createElement("button");
             detailsKnop.textContent = "Bekijk details";
             detailsKnop.classList.add("details-knop");
-            const scoreDetail = document.createElement("p");
-            scoreDetail.textContent = "Gemiddelde score: laden...";
-            const reviewsTitel = document.createElement("h4");
-            reviewsTitel.textContent = "Reviews";
 
-            const reviewsContainer = document.createElement("div");
-            reviewsContainer.textContent = "Reviews laden...";
-
+            // Details van een boek tonen
             detailsKnop.addEventListener("click", async function () {
                 boekenContainer.hidden = true;
                 boekDetails.hidden = false;
-
                 detailsInhoud.innerHTML = "";
 
                 const titelDetail = document.createElement("h3");
@@ -85,6 +89,12 @@ async function laadBoeken() {
                 const scoreDetail = document.createElement("p");
                 scoreDetail.textContent = "Gemiddelde score: laden...";
 
+                const reviewsTitel = document.createElement("h4");
+                reviewsTitel.textContent = "Reviews";
+
+                const reviewsContainer = document.createElement("div");
+                reviewsContainer.textContent = "Reviews laden...";
+
                 detailsInhoud.appendChild(titelDetail);
                 detailsInhoud.appendChild(auteursDetail);
                 detailsInhoud.appendChild(beschrijvingDetail);
@@ -92,9 +102,9 @@ async function laadBoeken() {
                 detailsInhoud.appendChild(voorraadDetail);
                 detailsInhoud.appendChild(isbnDetail);
                 detailsInhoud.appendChild(scoreDetail);
-                detailsInhoud.appendChild(scoreDetail);
                 detailsInhoud.appendChild(reviewsTitel);
                 detailsInhoud.appendChild(reviewsContainer);
+
                 try {
                     const score = await laadGemiddeldeScore(boek.id);
                     scoreDetail.textContent = "Gemiddelde score: " + score;
@@ -108,7 +118,6 @@ async function laadBoeken() {
                     }
 
                     const reviews = await reviewsResponse.json();
-
                     reviewsContainer.innerHTML = "";
 
                     if (reviews.length === 0) {
@@ -127,19 +136,13 @@ async function laadBoeken() {
 
                             reviewKaart.appendChild(reviewScore);
                             reviewKaart.appendChild(reviewTekst);
-
                             reviewsContainer.appendChild(reviewKaart);
                         });
                     }
-
                 } catch (error) {
-                    console.error(
-                        "Fout bij het ophalen van de gemiddelde score:",
-                        error
-                    );
-
-                    scoreDetail.textContent =
-                        "Gemiddelde score niet beschikbaar.";
+                    console.error("Fout bij het ophalen van reviews:", error);
+                    scoreDetail.textContent = "Gemiddelde score niet beschikbaar.";
+                    reviewsContainer.textContent = "Reviews konden niet worden geladen.";
                 }
             });
 
@@ -154,10 +157,8 @@ async function laadBoeken() {
         });
     } catch (error) {
         console.error("Fout bij het ophalen van boeken:", error);
-        boekenContainer.textContent =
-            "De boeken konden niet worden geladen.";
+        boekenContainer.textContent = "De boeken konden niet worden geladen.";
     }
-
 }
 
 terugKnop.addEventListener("click", function () {
@@ -165,8 +166,7 @@ terugKnop.addEventListener("click", function () {
     boekenContainer.hidden = false;
 });
 
-const registratieFormulier = document.querySelector("#registratie-formulier");
-const registratieBericht = document.querySelector("#registratie-bericht");
+
 registratieBericht.textContent = "";
 
 registratieFormulier.addEventListener("submit", async function (event) {
@@ -192,19 +192,14 @@ registratieFormulier.addEventListener("submit", async function (event) {
         }
 
         registratieBericht.textContent = "Je account is aangemaakt!";
-
         registratieFormulier.reset();
     } catch (error) {
         console.error("Fout bij registratie:", error);
         registratieBericht.textContent = error.message;
     }
-})
+});
 
-
-
-const loginFormulier = document.querySelector("#login-formulier");
-const loginBericht = document.querySelector("#login-bericht");
-
+// Inloggen
 loginBericht.textContent = "";
 
 loginFormulier.addEventListener("submit", async function (event) {
@@ -225,7 +220,9 @@ loginFormulier.addEventListener("submit", async function (event) {
         });
 
         if (!response.ok) {
-            throw new Error("Inloggen mislukt. Controleer je e-mailadres en wachtwoord.");
+            throw new Error(
+                "Inloggen mislukt. Controleer je e-mailadres en wachtwoord."
+            );
         }
 
         const ingelogdeGebruiker = await response.json();
@@ -238,10 +235,44 @@ loginFormulier.addEventListener("submit", async function (event) {
         loginBericht.textContent =
             "Je bent succesvol ingelogd als " + ingelogdeGebruiker.name + "!";
 
+        // Meteen de naam en de uitlogknop tonen
+        toonIngelogdeGebruiker();
+
+        loginFormulier.reset();
     } catch (error) {
         console.error("Fout bij inloggen:", error);
         loginBericht.textContent = error.message;
     }
 });
+
+// De ingelogde gebruiker tonen
+function toonIngelogdeGebruiker() {
+    const opgeslagenGebruiker = sessionStorage.getItem("ingelogdeGebruiker");
+
+    if (opgeslagenGebruiker) {
+        const gebruiker = JSON.parse(opgeslagenGebruiker);
+
+        gebruikerStatus.textContent = "Ingelogd als: " + gebruiker.name;
+        gebruikerStatus.hidden = false;
+        uitlogKnop.hidden = false;
+    } else {
+        gebruikerStatus.hidden = true;
+        uitlogKnop.hidden = true;
+    }
+}
+
+
+uitlogKnop.addEventListener("click", function () {
+    sessionStorage.removeItem("ingelogdeGebruiker");
+
+    gebruikerStatus.hidden = true;
+    uitlogKnop.hidden = true;
+
+    loginBericht.textContent = "Je bent uitgelogd!";
+});
+
+
+toonIngelogdeGebruiker();
+
 
 laadBoeken();
