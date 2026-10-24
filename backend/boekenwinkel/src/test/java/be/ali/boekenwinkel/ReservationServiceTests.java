@@ -149,4 +149,61 @@ class ReservationServiceTests {
         verify(reservationRepository, never())
                 .save(any(Reservation.class));
     }
+
+    @Test
+    void reserveringDieNietBestaatGeeftFout() {
+        ReservationRepository reservationRepository =
+                mock(ReservationRepository.class);
+        BookRepository bookRepository =
+                mock(BookRepository.class);
+
+        ReservationService reservationService =
+                new ReservationService(
+                        reservationRepository,
+                        bookRepository
+                );
+
+        when(reservationRepository.findById(99L))
+                .thenReturn(java.util.Optional.empty());
+
+        assertThrows(
+                ResponseStatusException.class,
+                () -> reservationService.confirmReservation(99L)
+        );
+
+        verify(bookRepository, never()).findById(anyLong());
+        verify(reservationRepository, never())
+                .save(any(Reservation.class));
+    }
+
+    @Test
+    void reserveringKanNietBetaaldWordenVoorBevestiging() {
+        ReservationRepository reservationRepository =
+                mock(ReservationRepository.class);
+        BookRepository bookRepository =
+                mock(BookRepository.class);
+
+        ReservationService reservationService =
+                new ReservationService(
+                        reservationRepository,
+                        bookRepository
+                );
+
+        Reservation reservation = new Reservation();
+        reservation.setStatus("PENDING");
+        reservation.setPaymentStatus("NOT_PAID");
+
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
+
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> reservationService.markAsPaid(1L)
+        );
+
+        assertEquals(409, exception.getStatusCode().value());
+
+        verify(reservationRepository, never())
+                .save(any(Reservation.class));
+    }
 }
