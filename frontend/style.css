@@ -106,3 +106,74 @@ main h2 {
     font-weight: bold;
     color: #0c5679;
 }
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+label {
+    font-weight: bold;
+    color: #17324d;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #0c5679;
+    border-color: #0c5679;
+}
+
+button {
+    padding: 12px 18px;
+    background-color: #17324d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0c5679;
+}
+
+button:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+}
+
+#reservering-sectie,
+#mijn-reserveringen-sectie {
+    margin-top: 24px;
+    padding: 20px;
+    background-color: #f4f6f8;
+    border-radius: 8px;
+}
+
+#gebruiker-status {
+    font-weight: bold;
+    color: #0c5679;
+}
+
+#registratie-bericht,
+#login-bericht,
+#review-bericht,
+#reservering-bericht,
+#mijn-reserveringen-bericht {
+    line-height: 1.5;
+}
