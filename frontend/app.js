@@ -12,8 +12,90 @@ const loginBericht = document.querySelector("#login-bericht");
 
 const gebruikerStatus = document.querySelector("#gebruiker-status");
 const uitlogKnop = document.querySelector("#uitlog-knop");
+const profielKnop = document.querySelector("#profiel-knop");
+const mijnProfiel = document.querySelector("#mijn-profiel");
+const profielInhoud = document.querySelector("#profiel-inhoud");
+const gekochteBoeken = document.querySelector("#gekochte-boeken");
+const profielTerugKnop = document.querySelector("#profiel-terug-knop");
 
-// Gemiddelde reviewscore ophalen
+
+profielKnop.addEventListener("click", async function () {
+    const opgeslagenGebruiker = sessionStorage.getItem("ingelogdeGebruiker");
+
+    if (!opgeslagenGebruiker) {
+        return;
+    }
+
+    const gebruiker = JSON.parse(opgeslagenGebruiker);
+
+    try {
+        const profielResponse = await fetch(
+            "http://localhost:8080/users/" + gebruiker.id + "/profile"
+        );
+
+        if (!profielResponse.ok) {
+            throw new Error("Profiel ophalen is mislukt.");
+        }
+
+        const profiel = await profielResponse.json();
+
+        profielInhoud.innerHTML = "";
+
+        const naam = document.createElement("p");
+        naam.textContent = "Naam: " + profiel.name;
+
+        const email = document.createElement("p");
+        email.textContent = "E-mailadres: " + profiel.email;
+
+        profielInhoud.appendChild(naam);
+        profielInhoud.appendChild(email);
+
+        const boekenResponse = await fetch(
+            "http://localhost:8080/users/" + gebruiker.id + "/purchased-books"
+        );
+
+        if (!boekenResponse.ok) {
+            throw new Error("Gekochte boeken ophalen is mislukt.");
+        }
+
+        const boeken = await boekenResponse.json();
+
+        gekochteBoeken.innerHTML = "";
+
+        if (boeken.length === 0) {
+            gekochteBoeken.textContent = "Je hebt nog geen gekochte boeken.";
+        } else {
+            boeken.forEach(function (boek) {
+                const boekKaart = document.createElement("article");
+
+                const titel = document.createElement("h4");
+                titel.textContent = boek.title;
+
+                const auteurs = document.createElement("p");
+                auteurs.textContent = "Auteur: " + boek.authors;
+
+                const prijs = document.createElement("p");
+                prijs.textContent = "Prijs: €" + boek.price;
+
+                boekKaart.appendChild(titel);
+                boekKaart.appendChild(auteurs);
+                boekKaart.appendChild(prijs);
+
+                gekochteBoeken.appendChild(boekKaart);
+            });
+        }
+
+        boekenContainer.hidden = true;
+        boekDetails.hidden = true;
+        mijnProfiel.hidden = false;
+
+    } catch (error) {
+        console.error("Fout bij het ophalen van het profiel:", error);
+        alert("Je profiel of gekochte boeken konden niet worden geladen.");
+    }
+});
+
+
 async function laadGemiddeldeScore(boekId) {
     const response = await fetch(
         "http://localhost:8080/reviews/book/" + boekId + "/average"
@@ -26,7 +108,7 @@ async function laadGemiddeldeScore(boekId) {
     return await response.json();
 }
 
-// Alle boeken ophalen en tonen
+
 async function laadBoeken() {
     try {
         const response = await fetch("http://localhost:8080/books");
@@ -62,7 +144,7 @@ async function laadBoeken() {
             detailsKnop.textContent = "Bekijk details";
             detailsKnop.classList.add("details-knop");
 
-            // Details van een boek tonen
+
             detailsKnop.addEventListener("click", async function () {
                 boekenContainer.hidden = true;
                 boekDetails.hidden = false;
@@ -165,6 +247,10 @@ terugKnop.addEventListener("click", function () {
     boekDetails.hidden = true;
     boekenContainer.hidden = false;
 });
+profielTerugKnop.addEventListener("click", function () {
+    mijnProfiel.hidden = true;
+    boekenContainer.hidden = false;
+});
 
 
 registratieBericht.textContent = "";
@@ -235,7 +321,7 @@ loginFormulier.addEventListener("submit", async function (event) {
         loginBericht.textContent =
             "Je bent succesvol ingelogd als " + ingelogdeGebruiker.name + "!";
 
-        // Meteen de naam en de uitlogknop tonen
+
         toonIngelogdeGebruiker();
 
         loginFormulier.reset();
@@ -245,7 +331,7 @@ loginFormulier.addEventListener("submit", async function (event) {
     }
 });
 
-// De ingelogde gebruiker tonen
+
 function toonIngelogdeGebruiker() {
     const opgeslagenGebruiker = sessionStorage.getItem("ingelogdeGebruiker");
 
@@ -254,9 +340,11 @@ function toonIngelogdeGebruiker() {
 
         gebruikerStatus.textContent = "Ingelogd als: " + gebruiker.name;
         gebruikerStatus.hidden = false;
+        profielKnop.hidden = false;
         uitlogKnop.hidden = false;
     } else {
         gebruikerStatus.hidden = true;
+        profielKnop.hidden = true;
         uitlogKnop.hidden = true;
     }
 }
