@@ -206,4 +206,33 @@ class ReservationServiceTests {
         verify(reservationRepository, never())
                 .save(any(Reservation.class));
     }
+    @Test
+    void bevestigdeReserveringKanSuccesvolBetaaldWorden() {
+        ReservationRepository reservationRepository =
+                mock(ReservationRepository.class);
+        BookRepository bookRepository =
+                mock(BookRepository.class);
+
+        ReservationService reservationService =
+                new ReservationService(
+                        reservationRepository,
+                        bookRepository
+                );
+
+        Reservation reservation = new Reservation();
+        reservation.setStatus("CONFIRMED");
+        reservation.setPaymentStatus("NOT_PAID");
+
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
+
+        when(reservationRepository.save(any(Reservation.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Reservation result = reservationService.markAsPaid(1L);
+
+        assertEquals("PAID", result.getPaymentStatus());
+
+        verify(reservationRepository).save(reservation);
+    }
 }
