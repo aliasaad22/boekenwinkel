@@ -25,6 +25,9 @@ public class Reservation {
         if (status == null) {
             status = "PENDING";
         }
+        if (paymentStatus == null) {
+            paymentStatus = "NOT_PAID";
+        }
     }
 
     public Reservation() {
