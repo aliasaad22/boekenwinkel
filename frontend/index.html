@@ -104,6 +104,33 @@
     <section id="boek-details" hidden>
         <h2>Boekdetails</h2>
         <div id="details-inhoud"></div>
+
+        <form id="review-formulier" hidden>
+            <h4>Schrijf een review</h4>
+
+            <label for="review-score">Score (1 tot 5):</label>
+            <select id="review-score" required>
+                <option value="">Kies een score</option>
+                <option value="1">1/5</option>
+                <option value="2">2/5</option>
+                <option value="3">3/5</option>
+                <option value="4">4/5</option>
+                <option value="5">5/5</option>
+            </select>
+
+            <label for="review-tekst">Je review:</label>
+            <textarea
+                    id="review-tekst"
+                    rows="4"
+                    required
+                    placeholder="Wat vind je van dit boek?"
+            ></textarea>
+
+            <button type="submit">Review plaatsen</button>
+
+            <p id="review-bericht"></p>
+        </form>
+
         <button id="terug-knop" type="button">Terug naar boeken</button>
     </section>
 </main>

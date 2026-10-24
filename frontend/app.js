@@ -3,6 +3,53 @@ const boekenContainer = document.querySelector("#boeken");
 const boekDetails = document.querySelector("#boek-details");
 const detailsInhoud = document.querySelector("#details-inhoud");
 const terugKnop = document.querySelector("#terug-knop");
+const reviewFormulier = document.querySelector("#review-formulier");
+const reviewScore = document.querySelector("#review-score");
+const reviewTekst = document.querySelector("#review-tekst");
+const reviewBericht = document.querySelector("#review-bericht");
+let huidigBoekId = null;
+
+reviewFormulier.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const opgeslagenGebruiker = sessionStorage.getItem("ingelogdeGebruiker");
+
+    if (!opgeslagenGebruiker) {
+        reviewBericht.textContent = "Je moet ingelogd zijn om een review te plaatsen.";
+        return;
+    }
+
+    const gebruiker = JSON.parse(opgeslagenGebruiker);
+
+    const nieuweReview = {
+        bookId: huidigBoekId,
+        userId: gebruiker.id,
+        score: Number(reviewScore.value),
+        text: reviewTekst.value.trim()
+    };
+
+    try {
+        const response = await fetch("http://localhost:8080/reviews", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(nieuweReview)
+        });
+
+        if (!response.ok) {
+            reviewBericht.textContent = "Review plaatsen is mislukt. Controleer of je het boek hebt gekocht en nog geen review hebt geplaatst.";
+            return;
+        }
+
+        reviewBericht.textContent = "Je review is succesvol geplaatst!";
+        reviewFormulier.reset();
+
+    } catch (error) {
+        reviewBericht.textContent = "Er is een verbindingsfout met de server.";
+        console.error(error);
+    }
+});
 
 const registratieFormulier = document.querySelector("#registratie-formulier");
 const registratieBericht = document.querySelector("#registratie-bericht");
@@ -17,6 +64,8 @@ const mijnProfiel = document.querySelector("#mijn-profiel");
 const profielInhoud = document.querySelector("#profiel-inhoud");
 const gekochteBoeken = document.querySelector("#gekochte-boeken");
 const profielTerugKnop = document.querySelector("#profiel-terug-knop");
+
+
 
 
 profielKnop.addEventListener("click", async function () {
@@ -149,6 +198,10 @@ async function laadBoeken() {
                 boekenContainer.hidden = true;
                 boekDetails.hidden = false;
                 detailsInhoud.innerHTML = "";
+                huidigBoekId = boek.id;
+
+                const opgeslagenGebruiker = sessionStorage.getItem("ingelogdeGebruiker");
+                reviewFormulier.hidden = !opgeslagenGebruiker;
 
                 const titelDetail = document.createElement("h3");
                 titelDetail.textContent = boek.title;
@@ -188,6 +241,7 @@ async function laadBoeken() {
                 detailsInhoud.appendChild(reviewsContainer);
 
                 try {
+
                     const score = await laadGemiddeldeScore(boek.id);
                     scoreDetail.textContent = "Gemiddelde score: " + score;
 
