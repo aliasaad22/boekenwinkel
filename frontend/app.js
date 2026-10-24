@@ -228,7 +228,15 @@ loginFormulier.addEventListener("submit", async function (event) {
             throw new Error("Inloggen mislukt. Controleer je e-mailadres en wachtwoord.");
         }
 
-        loginBericht.textContent = "Je bent succesvol ingelogd!";
+        const ingelogdeGebruiker = await response.json();
+
+        sessionStorage.setItem(
+            "ingelogdeGebruiker",
+            JSON.stringify(ingelogdeGebruiker)
+        );
+
+        loginBericht.textContent =
+            "Je bent succesvol ingelogd als " + ingelogdeGebruiker.name + "!";
 
     } catch (error) {
         console.error("Fout bij inloggen:", error);
