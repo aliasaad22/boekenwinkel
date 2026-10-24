@@ -605,14 +605,24 @@ reserveringenLadenKnop.addEventListener("click", async function () {
 
         for (const reservering of reserveringen) {
             const reserveringElement = document.createElement("p");
+            const betaalStatusTekst =
+                reservering.paymentStatus === "PAID"
+                    ? "Betaald"
+                    : "Nog niet betaald";
+
+            const reserveringStatusTekst =
+                reservering.status === "CONFIRMED"
+                    ? "Bevestigd"
+                    : reservering.status === "PENDING"
+                        ? "In afwachting"
+                        : reservering.status;
 
             reserveringElement.textContent =
                 "Reservering #" + reservering.id +
                 " | Boek-ID: " + reservering.bookId +
                 " | Ophaaldatum: " + reservering.pickupDate +
-                " | Status: " + reservering.status +
-                " | Betaling: " + reservering.paymentStatus;
-
+                " | Status: " + reserveringStatusTekst +
+                " | Betaling: " + betaalStatusTekst;
             mijnReserveringen.appendChild(reserveringElement);
 
             try {
@@ -627,8 +637,8 @@ reserveringenLadenKnop.addEventListener("click", async function () {
                         "Reservering #" + reservering.id +
                         " | Boek: " + boek.title +
                         " | Ophaaldatum: " + reservering.pickupDate +
-                        " | Status: " + reservering.status +
-                        " | Betaling: " + reservering.paymentStatus;
+                        " | Status: " + reserveringStatusTekst +
+                        " | Betaling: " + betaalStatusTekst;
                 }
             } catch (fout) {
                 console.error("Boektitel ophalen mislukt:", fout);
