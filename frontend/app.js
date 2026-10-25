@@ -229,6 +229,18 @@ async function laadBoeken() {
             const voorraad = document.createElement("p");
             voorraad.textContent = "Voorraad: " + boek.stock;
 
+            const beschikbaarheid = document.createElement("p");
+
+            if (boek.stock > 5) {
+                beschikbaarheid.textContent = "Beschikbaar";
+            } else if (boek.stock > 0) {
+                beschikbaarheid.textContent = "Beperkte voorraad";
+            } else {
+                beschikbaarheid.textContent = "Tijdelijk niet beschikbaar";
+            }
+
+            boekKaart.appendChild(beschikbaarheid);
+
             const detailsKnop = document.createElement("button");
             detailsKnop.type = "button";
             detailsKnop.textContent = "Bekijk details";
