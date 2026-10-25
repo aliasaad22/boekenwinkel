@@ -4,12 +4,16 @@ const boekDetails = document.querySelector("#boek-details");
 const detailsInhoud = document.querySelector("#details-inhoud");
 const terugKnop = document.querySelector("#terug-knop");
 
-const accountKeuze = document.querySelector("#account-keuze");
 const loginPaneel = document.querySelector("#login-paneel");
 const registratiePaneel = document.querySelector("#registratie-paneel");
 const ingelogdePaneel = document.querySelector("#ingelogde-paneel");
-const toonLoginKnop = document.querySelector("#toon-login-knop");
-const toonRegistratieKnop = document.querySelector("#toon-registratie-knop");
+
+const boekenMenuKnop = document.querySelector("#boeken-menu-knop");
+const reserveringenMenuKnop = document.querySelector("#reserveringen-menu-knop");
+const profielMenuKnop = document.querySelector("#profiel-menu-knop");
+const loginMenuKnop = document.querySelector("#login-menu-knop");
+const registratieMenuKnop = document.querySelector("#registratie-menu-knop");
+const uitlogMenuKnop = document.querySelector("#uitlog-menu-knop");
 
 const reviewFormulier = document.querySelector("#review-formulier");
 const reviewScore = document.querySelector("#review-score");
@@ -46,8 +50,6 @@ const loginBericht =
     document.querySelector("#login-bericht");
 
 const gebruikerStatus = document.querySelector("#gebruiker-status");
-const uitlogKnop = document.querySelector("#uitlog-knop");
-const profielKnop = document.querySelector("#profiel-knop");
 const mijnProfiel = document.querySelector("#mijn-profiel");
 const profielInhoud = document.querySelector("#profiel-inhoud");
 const gekochteBoeken = document.querySelector("#gekochte-boeken");
@@ -61,13 +63,17 @@ function toonAccountPaneel(paneel) {
 
     loginBericht.textContent = "";
     registratieBericht.textContent = "";
+
+    boekenContainer.hidden = true;
+    boekDetails.hidden = true;
+    mijnProfiel.hidden = true;
 }
 
-toonLoginKnop.addEventListener("click", function () {
+loginMenuKnop.addEventListener("click", function () {
     toonAccountPaneel("login");
 });
 
-toonRegistratieKnop.addEventListener("click", function () {
+registratieMenuKnop.addEventListener("click", function () {
     toonAccountPaneel("registratie");
 });
 
@@ -75,29 +81,39 @@ function toonIngelogdeGebruiker() {
     const opgeslagenGebruiker =
         sessionStorage.getItem("ingelogdeGebruiker");
 
-    if (opgeslagenGebruiker) {
+    const ingelogd = Boolean(opgeslagenGebruiker);
+
+    if (ingelogd) {
         const gebruiker = JSON.parse(opgeslagenGebruiker);
 
         gebruikerStatus.textContent =
             "Ingelogd als: " + gebruiker.name;
-
-        accountKeuze.hidden = true;
-        loginPaneel.hidden = true;
-        registratiePaneel.hidden = true;
-        ingelogdePaneel.hidden = false;
     } else {
-        accountKeuze.hidden = false;
-        loginPaneel.hidden = false;
-        registratiePaneel.hidden = true;
-        ingelogdePaneel.hidden = true;
+        gebruikerStatus.textContent = "";
     }
+
+    loginMenuKnop.hidden = ingelogd;
+    registratieMenuKnop.hidden = ingelogd;
+    uitlogMenuKnop.hidden = !ingelogd;
+    reserveringenMenuKnop.hidden = !ingelogd;
+    profielMenuKnop.hidden = !ingelogd;
+
+    loginPaneel.hidden = true;
+    registratiePaneel.hidden = true;
+    ingelogdePaneel.hidden = !ingelogd;
 }
 
 function toonBoekenlijst() {
+    loginPaneel.hidden = true;
+    registratiePaneel.hidden = true;
     mijnProfiel.hidden = true;
     boekDetails.hidden = true;
     boekenContainer.hidden = false;
 }
+
+boekenMenuKnop.addEventListener("click", function () {
+    toonBoekenlijst();
+});
 
 function toonAccountStatus() {
     const ingelogd = Boolean(
@@ -216,6 +232,8 @@ async function laadBoeken() {
             detailsKnop.addEventListener("click", async function () {
                 huidigBoekId = boek.id;
 
+                loginPaneel.hidden = true;
+                registratiePaneel.hidden = true;
                 boekenContainer.hidden = true;
                 mijnProfiel.hidden = true;
                 boekDetails.hidden = false;
@@ -337,7 +355,6 @@ registratieFormulier.addEventListener("submit", async function (event) {
     }
 });
 
-
 loginFormulier.addEventListener("submit", async function (event) {
     event.preventDefault();
 
@@ -380,11 +397,12 @@ loginFormulier.addEventListener("submit", async function (event) {
         );
 
         loginFormulier.reset();
-        loginBericht.textContent = "Je bent succesvol ingelogd.";
 
         toonIngelogdeGebruiker();
         toonAccountStatus();
+        toonBoekenlijst();
 
+        loginBericht.textContent = "Je bent succesvol ingelogd.";
     } catch (error) {
         console.error("Fout bij inloggen:", error);
 
@@ -393,8 +411,7 @@ loginFormulier.addEventListener("submit", async function (event) {
     }
 });
 
-
-uitlogKnop.addEventListener("click", function () {
+uitlogMenuKnop.addEventListener("click", function () {
     sessionStorage.removeItem("ingelogdeGebruiker");
 
     toonIngelogdeGebruiker();
@@ -410,7 +427,7 @@ uitlogKnop.addEventListener("click", function () {
     registratieBericht.textContent = "";
 });
 
-profielKnop.addEventListener("click", async function () {
+profielMenuKnop.addEventListener("click", async function () {
     const opgeslagenGebruiker =
         sessionStorage.getItem("ingelogdeGebruiker");
 
@@ -481,6 +498,8 @@ profielKnop.addEventListener("click", async function () {
             });
         }
 
+        loginPaneel.hidden = true;
+        registratiePaneel.hidden = true;
         boekenContainer.hidden = true;
         boekDetails.hidden = true;
         mijnProfiel.hidden = false;
@@ -488,6 +507,27 @@ profielKnop.addEventListener("click", async function () {
         console.error("Fout bij het ophalen van het profiel:", error);
         alert("Je profiel of gekochte boeken konden niet worden geladen.");
     }
+});
+
+reserveringenMenuKnop.addEventListener("click", async function () {
+    const opgeslagenGebruiker =
+        sessionStorage.getItem("ingelogdeGebruiker");
+
+    if (!opgeslagenGebruiker) {
+        return;
+    }
+
+    loginPaneel.hidden = true;
+    registratiePaneel.hidden = true;
+    boekenContainer.hidden = true;
+    mijnProfiel.hidden = true;
+    boekDetails.hidden = true;
+
+    mijnReserveringenSectie.hidden = false;
+    mijnReserveringen.innerHTML = "";
+    mijnReserveringenBericht.textContent = "";
+
+    await laadMijnReserveringen();
 });
 
 reviewFormulier.addEventListener("submit", async function (event) {
@@ -618,6 +658,10 @@ reserverenKnop.addEventListener("click", async function () {
 });
 
 reserveringenLadenKnop.addEventListener("click", async function () {
+    await laadMijnReserveringen();
+});
+
+async function laadMijnReserveringen() {
     const opgeslagenGebruiker =
         sessionStorage.getItem("ingelogdeGebruiker");
 
@@ -750,10 +794,6 @@ reserveringenLadenKnop.addEventListener("click", async function () {
         mijnReserveringenBericht.textContent =
             "Er is een verbindingsfout met de server.";
     }
-});
-
-async function laadMijnReserveringen() {
-    reserveringenLadenKnop.click();
 }
 
 toonIngelogdeGebruiker();

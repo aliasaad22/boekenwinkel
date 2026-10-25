@@ -17,6 +17,37 @@ header {
     text-align: center;
 }
 
+#hoofdmenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e5eb;
+}
+
+#hoofdmenu button {
+    padding: 12px 18px;
+}
+
+#hoofdmenu button[hidden] {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    #hoofdmenu {
+        gap: 8px;
+        padding: 12px;
+    }
+
+    #hoofdmenu button {
+        flex: 1 1 40%;
+    }
+}
+
+
 header h1 {
     margin: 0;
 }
