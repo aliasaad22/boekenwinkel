@@ -11,6 +11,10 @@ import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Bevat de servicelogica voor het registreren en opzoeken van gebruikers,
+ * het controleren van wachtwoorden en het ophalen van gebruikersgegevens.
+ */
 @Service
 public class BookUserService {
 
@@ -21,6 +25,13 @@ public class BookUserService {
     private final PasswordEncoder passwordEncoder =
             new BCryptPasswordEncoder();
 
+    /**
+     * Maakt de service aan met de benodigde repositories.
+     *
+     * @param bookUserRepository repository voor gebruikers
+     * @param reservationRepository repository voor reserveringen
+     * @param bookRepository repository voor boeken
+     */
     public BookUserService(
             BookUserRepository bookUserRepository,
             ReservationRepository reservationRepository,
@@ -30,6 +41,15 @@ public class BookUserService {
         this.bookRepository = bookRepository;
     }
 
+    /**
+     * Registreert een nieuwe gebruiker.
+     * Controleert of het e-mailadres al bestaat en slaat het wachtwoord
+     * gehasht op.
+     *
+     * @param user de gebruiker die geregistreerd moet worden
+     * @return de opgeslagen gebruiker
+     * @throws EmailAlreadyExistsException als het e-mailadres al bestaat
+     */
     public BookUser saveUser(BookUser user) {
         if (bookUserRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException();
@@ -39,20 +59,47 @@ public class BookUserService {
         return bookUserRepository.save(user);
     }
 
+    /**
+     * Zoekt een gebruiker op basis van het e-mailadres.
+     *
+     * @param email het e-mailadres van de gebruiker
+     * @return een Optional met de gebruiker, of leeg als die niet bestaat
+     */
     public Optional<BookUser> getUserByEmail(String email) {
         return bookUserRepository.findByEmail(email);
     }
 
+    /**
+     * Zoekt een gebruiker op basis van het ID.
+     *
+     * @param id het ID van de gebruiker
+     * @return een Optional met de gebruiker, of leeg als die niet bestaat
+     */
     public Optional<BookUser> getUserById(Long id) {
         return bookUserRepository.findById(id);
     }
 
+    /**
+     * Vergelijkt een ingevoerd wachtwoord met het gehashte wachtwoord.
+     *
+     * @param rawPassword het ingevoerde wachtwoord
+     * @param encodedPassword het opgeslagen gehashte wachtwoord
+     * @return true als de wachtwoorden overeenkomen, anders false
+     */
     public boolean checkPassword(
             String rawPassword,
             String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
+    /**
+     * Probeert een gebruiker aan te melden met e-mailadres en wachtwoord.
+     *
+     * @param email het e-mailadres van de gebruiker
+     * @param rawPassword het ingevoerde wachtwoord
+     * @return een Optional met de gebruiker bij geldige gegevens,
+     *         of leeg bij ongeldige gegevens
+     */
     public Optional<BookUser> login(
             String email,
             String rawPassword) {
@@ -72,6 +119,13 @@ public class BookUserService {
         return Optional.of(user);
     }
 
+    /**
+     * Haalt het profiel en de reserveringen van een gebruiker op.
+     *
+     * @param userId het ID van de gebruiker
+     * @return het profiel met gebruikersgegevens en reserveringen
+     * @throws ResponseStatusException als de gebruiker niet bestaat (404)
+     */
     public UserProfileResponse getUserProfile(Long userId) {
         BookUser user = getUserById(userId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -90,6 +144,13 @@ public class BookUserService {
         );
     }
 
+    /**
+     * Haalt de betaalde boeken van een gebruiker op.
+     *
+     * @param userId het ID van de gebruiker
+     * @return een lijst met aangekochte boeken
+     * @throws ResponseStatusException als de gebruiker niet bestaat (404)
+     */
     public List<PurchasedBookResponse> getPurchasedBooks(Long userId) {
         getUserById(userId)
                 .orElseThrow(() -> new ResponseStatusException(
