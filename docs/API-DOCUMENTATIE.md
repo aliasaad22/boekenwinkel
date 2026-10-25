@@ -38,18 +38,19 @@ Basisendpoint: `/users`
 Een gebruiker die niet gevonden wordt, kan een `404 Not Found` opleveren. Een login met onjuiste gegevens geeft `401 Unauthorized`.
 
 Bij registratie en login geeft de controller een `BookUserResponse` terug met het gebruikers-ID, de naam en het e-mailadres.
-
+Bij registratie kan een foutmelding optreden als het e-mailadres al bestaat. Het wachtwoord wordt gehasht opgeslagen. De endpoints voor het gebruikersprofiel en de aangekochte boeken geven een `404 Not Found` als de gebruiker niet bestaat. Bij aangekochte boeken worden alleen reserveringen met betaalstatus `PAID` getoond.
 ## 4. Reserveringen
 
 Basisendpoint: `/reservations`
 
-| Methode | Endpoint | Beschrijving |
-|---|---|---|
-| POST | `/reservations` | Een reservering aanmaken |
-| PUT | `/reservations/{id}/confirm` | Een reservering bevestigen |
-| GET | `/reservations` | Alle reserveringen ophalen |
-| PUT | `/reservations/{id}/pay` | Een reservering als betaald markeren |
-| GET | `/reservations/user/{userId}` | Reserveringen van een gebruiker ophalen |
+
+| Methode | Endpoint | Beschrijving | Successtatus |
+|---|---|---|---|
+| POST | `/reservations` | Een reservering aanmaken | 200 OK |
+| PUT | `/reservations/{id}/confirm` | Een reservering bevestigen | 200 OK |
+| GET | `/reservations` | Alle reserveringen ophalen | 200 OK |
+| PUT | `/reservations/{id}/pay` | Een reservering als betaald markeren | 200 OK |
+| GET | `/reservations/user/{userId}` | Reserveringen van een gebruiker ophalen | 200 OK |
 
 ### Reservering aanmaken
 
