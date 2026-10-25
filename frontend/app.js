@@ -1,5 +1,7 @@
 
 const boekenContainer = document.querySelector("#boeken");
+const accountSectie = document.querySelector("#account-sectie");
+const boekenSectie = document.querySelector("#boeken-sectie");
 const boekDetails = document.querySelector("#boek-details");
 const detailsInhoud = document.querySelector("#details-inhoud");
 const terugKnop = document.querySelector("#terug-knop");
@@ -58,25 +60,24 @@ const profielTerugKnop = document.querySelector("#profiel-terug-knop");
 let huidigBoekId = null;
 
 function toonAccountPaneel(paneel) {
+    accountSectie.hidden = false;
+    boekenSectie.hidden = true;
+    mijnProfiel.hidden = true;
+    mijnReserveringenSectie.hidden = true;
+    boekDetails.hidden = true;
+
     loginPaneel.hidden = paneel !== "login";
     registratiePaneel.hidden = paneel !== "registratie";
-
-    loginBericht.textContent = "";
-    registratieBericht.textContent = "";
-
-    boekenContainer.hidden = true;
-    boekDetails.hidden = true;
-    mijnProfiel.hidden = true;
+    ingelogdePaneel.hidden = true;
 }
-
 loginMenuKnop.addEventListener("click", function () {
     toonAccountPaneel("login");
 });
 
+
 registratieMenuKnop.addEventListener("click", function () {
     toonAccountPaneel("registratie");
 });
-
 function toonIngelogdeGebruiker() {
     const opgeslagenGebruiker =
         sessionStorage.getItem("ingelogdeGebruiker");
@@ -104,13 +105,17 @@ function toonIngelogdeGebruiker() {
 }
 
 function toonBoekenlijst() {
+    accountSectie.hidden = true;
+    boekenSectie.hidden = false;
+    mijnProfiel.hidden = true;
+    mijnReserveringenSectie.hidden = true;
+    boekDetails.hidden = true;
+
     loginPaneel.hidden = true;
     registratiePaneel.hidden = true;
-    mijnProfiel.hidden = true;
-    boekDetails.hidden = true;
+
     boekenContainer.hidden = false;
 }
-
 boekenMenuKnop.addEventListener("click", function () {
     toonBoekenlijst();
 });
@@ -234,8 +239,14 @@ async function laadBoeken() {
 
                 loginPaneel.hidden = true;
                 registratiePaneel.hidden = true;
+
+
+
+                accountSectie.hidden = true;
+                boekenSectie.hidden = true;
                 boekenContainer.hidden = true;
                 mijnProfiel.hidden = true;
+                mijnReserveringenSectie.hidden = true;
                 boekDetails.hidden = false;
 
                 detailsInhoud.innerHTML = "";
@@ -517,15 +528,20 @@ reserveringenMenuKnop.addEventListener("click", async function () {
         return;
     }
 
+    accountSectie.hidden = true;
+    boekenSectie.hidden = true;
+    boekenContainer.hidden = true;
+    boekDetails.hidden = true;
+    mijnProfiel.hidden = false;
+
     loginPaneel.hidden = true;
     registratiePaneel.hidden = true;
-    boekenContainer.hidden = true;
-    mijnProfiel.hidden = true;
-    boekDetails.hidden = true;
-
     mijnReserveringenSectie.hidden = false;
     mijnReserveringen.innerHTML = "";
     mijnReserveringenBericht.textContent = "";
+
+
+
 
     await laadMijnReserveringen();
 });
@@ -798,4 +814,5 @@ async function laadMijnReserveringen() {
 
 toonIngelogdeGebruiker();
 toonAccountStatus();
+toonBoekenlijst();
 laadBoeken();

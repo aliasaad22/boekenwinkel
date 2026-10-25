@@ -1,216 +1,221 @@
 
 <!DOCTYPE html>
 <html lang="nl">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="style.css">
-        <title>Mijn Boekenwinkel</title>
-    </head>
-    <body>
-    <header>
-        <h1>Mijn Boekenwinkel</h1>
-        <p>Ontdek, reserveer en koop je favoriete boeken.</p>
-    </header>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Mijn Boekenwinkel</title>
+</head>
+<body>
+<header>
+    <h1>Mijn Boekenwinkel</h1>
+    <p>Ontdek, reserveer en koop je favoriete boeken.</p>
+</header>
 
+<nav id="hoofdmenu">
+    <button id="boeken-menu-knop" type="button">
+        Boeken
+    </button>
 
-    <nav id="hoofdmenu">
-        <button id="boeken-menu-knop" type="button">
-            Boeken
-        </button>
+    <button id="reserveringen-menu-knop" type="button" hidden>
+        Mijn reserveringen
+    </button>
 
-        <button id="reserveringen-menu-knop" type="button" hidden>
-            Mijn reserveringen
-        </button>
+    <button id="profiel-menu-knop" type="button" hidden>
+        Mijn profiel
+    </button>
 
-        <button id="profiel-menu-knop" type="button" hidden>
-            Mijn profiel
-        </button>
+    <button id="login-menu-knop" type="button">
+        Inloggen
+    </button>
 
-        <button id="login-menu-knop" type="button">
-            Inloggen
-        </button>
+    <button id="registratie-menu-knop" type="button">
+        Registreren
+    </button>
 
-        <button id="registratie-menu-knop" type="button">
-            Registreren
-        </button>
+    <button id="uitlog-menu-knop" type="button" hidden>
+        Uitloggen
+    </button>
+</nav>
 
-        <button id="uitlog-menu-knop" type="button" hidden>
-            Uitloggen
-        </button>
-    </nav>
+<main>
+    <section id="account-sectie">
+        <h2>Welkom bij Mijn Boekenwinkel</h2>
 
+        <div id="ingelogde-paneel" hidden>
+            <p id="gebruiker-status"></p>
+        </div>
 
+        <div id="login-paneel">
+            <h3>Inloggen</h3>
 
-
-    <main>
-        <section id="account-sectie">
-            <h2>Welkom bij Mijn Boekenwinkel</h2>
-
-            <div id="ingelogde-paneel" hidden>
-                <p id="gebruiker-status"></p>
-            </div>
-
-
-            <div id="login-paneel">
-                <h3>Inloggen</h3>
-
-                <form id="login-formulier">
-                    <label for="login-email">E-mailadres:</label>
-                    <input
-                            type="email"
-                            id="login-email"
-                            name="email"
-                            autocomplete="email"
-                            required
-                    >
-
-                    <label for="login-wachtwoord">Wachtwoord:</label>
-                    <input
-                            type="password"
-                            id="login-wachtwoord"
-                            name="password"
-                            autocomplete="current-password"
-                            required
-                    >
-
-                    <button type="submit">Inloggen</button>
-                </form>
-
-                <p id="login-bericht" role="status" aria-live="polite"></p>
-            </div>
-
-            <div id="registratie-paneel" hidden>
-                <h3>Account aanmaken</h3>
-
-                <form id="registratie-formulier">
-                    <label for="registratie-naam">Naam:</label>
-                    <input
-                            type="text"
-                            id="registratie-naam"
-                            name="name"
-                            autocomplete="name"
-                            required
-                    >
-
-                    <label for="registratie-email">E-mailadres:</label>
-                    <input
-                            type="email"
-                            id="registratie-email"
-                            name="email"
-                            autocomplete="email"
-                            required
-                    >
-
-                    <label for="registratie-wachtwoord">Wachtwoord:</label>
-                    <input
-                            type="password"
-                            id="registratie-wachtwoord"
-                            name="password"
-                            autocomplete="new-password"
-                            required
-                    >
-
-                    <button type="submit">Account aanmaken</button>
-                </form>
-
-                <p id="registratie-bericht" role="status" aria-live="polite"></p>
-            </div>
-
-
-        </section>
-
-        <section id="boeken-sectie">
-            <h2>Onze boeken</h2>
-            <p>Welkom in onze online boekenwinkel!</p>
-
-            <div id="boeken">
-                <p>Boeken laden...</p>
-            </div>
-        </section>
-
-        <section id="mijn-profiel" hidden>
-            <h2>Mijn profiel</h2>
-
-            <div id="profiel-inhoud"></div>
-
-            <h3>Mijn gekochte boeken</h3>
-
-            <div id="gekochte-boeken">
-                <p>Gekochte boeken laden...</p>
-            </div>
-
-            <button id="profiel-terug-knop" type="button">
-                Terug naar boeken
-            </button>
-        </section>
-
-        <section id="boek-details" hidden>
-            <h2>Boekdetails</h2>
-
-            <div id="details-inhoud"></div>
-
-            <section id="reservering-sectie" hidden>
-                <h3>Boek reserveren</h3>
-
-                <label for="ophaaldatum">Kies een ophaaldatum:</label>
-                <input type="date" id="ophaaldatum" required>
-
-                <button type="button" id="reserveren-knop">
-                    Boek reserveren
-                </button>
-
-                <p id="reservering-bericht" role="status" aria-live="polite"></p>
-            </section>
-
-            <section id="mijn-reserveringen-sectie" hidden>
-                <h3>Mijn reserveringen</h3>
-
-                <button id="reserveringen-laden-knop" type="button">
-                    Mijn reserveringen bekijken
-                </button>
-
-                <div id="mijn-reserveringen"></div>
-
-                <p id="mijn-reserveringen-bericht" role="status" aria-live="polite"></p>
-            </section>
-
-            <form id="review-formulier" hidden>
-                <h3>Schrijf een review</h3>
-
-                <label for="review-score">Score (1 tot 5):</label>
-                <select id="review-score" required>
-                    <option value="">Kies een score</option>
-                    <option value="1">1/5</option>
-                    <option value="2">2/5</option>
-                    <option value="3">3/5</option>
-                    <option value="4">4/5</option>
-                    <option value="5">5/5</option>
-                </select>
-
-                <label for="review-tekst">Je review:</label>
-                <textarea
-                        id="review-tekst"
-                        rows="4"
+            <form id="login-formulier">
+                <label for="login-email">E-mailadres:</label>
+                <input
+                        type="email"
+                        id="login-email"
+                        name="email"
+                        autocomplete="email"
                         required
-                        placeholder="Wat vind je van dit boek?"
-                ></textarea>
+                >
 
-                <button type="submit">Review plaatsen</button>
+                <label for="login-wachtwoord">Wachtwoord:</label>
+                <input
+                        type="password"
+                        id="login-wachtwoord"
+                        name="password"
+                        autocomplete="current-password"
+                        required
+                >
 
-                <p id="review-bericht" role="status" aria-live="polite"></p>
+                <button type="submit">Inloggen</button>
             </form>
 
-            <button id="terug-knop" type="button">
-                Terug naar boeken
+            <p id="login-bericht" role="status" aria-live="polite"></p>
+        </div>
+
+        <div id="registratie-paneel" hidden>
+            <h3>Account aanmaken</h3>
+
+            <form id="registratie-formulier">
+                <label for="registratie-naam">Naam:</label>
+                <input
+                        type="text"
+                        id="registratie-naam"
+                        name="name"
+                        autocomplete="name"
+                        required
+                >
+
+                <label for="registratie-email">E-mailadres:</label>
+                <input
+                        type="email"
+                        id="registratie-email"
+                        name="email"
+                        autocomplete="email"
+                        required
+                >
+
+                <label for="registratie-wachtwoord">Wachtwoord:</label>
+                <input
+                        type="password"
+                        id="registratie-wachtwoord"
+                        name="password"
+                        autocomplete="new-password"
+                        required
+                >
+
+                <button type="submit">Account aanmaken</button>
+            </form>
+
+            <p id="registratie-bericht" role="status" aria-live="polite"></p>
+        </div>
+    </section>
+
+    <section id="boeken-sectie">
+        <h2>Onze boeken</h2>
+        <p>Welkom in onze online boekenwinkel!</p>
+
+        <div id="boeken">
+            <p>Boeken laden...</p>
+        </div>
+    </section>
+
+    <section id="mijn-profiel" hidden>
+        <h2>Mijn profiel</h2>
+
+        <div id="profiel-inhoud"></div>
+
+        <h3>Mijn gekochte boeken</h3>
+
+        <div id="gekochte-boeken">
+            <p>Gekochte boeken laden...</p>
+        </div>
+
+        <button id="profiel-terug-knop" type="button">
+            Terug naar boeken
+        </button>
+    </section>
+
+    <section id="mijn-reserveringen-sectie" hidden>
+        <h2>Mijn reserveringen</h2>
+
+        <button id="reserveringen-laden-knop" type="button">
+            Reserveringen vernieuwen
+        </button>
+
+        <div id="mijn-reserveringen"></div>
+
+        <p
+                id="mijn-reserveringen-bericht"
+                role="status"
+                aria-live="polite"
+        ></p>
+    </section>
+
+    <section id="boek-details" hidden>
+        <h2>Boekdetails</h2>
+
+        <div id="details-inhoud"></div>
+
+        <section id="reservering-sectie" hidden>
+            <h3>Boek reserveren</h3>
+
+            <label for="ophaaldatum">Kies een ophaaldatum:</label>
+            <input type="date" id="ophaaldatum" required>
+
+            <button type="button" id="reserveren-knop">
+                Boek reserveren
             </button>
+
+            <p
+                    id="reservering-bericht"
+                    role="status"
+                    aria-live="polite"
+            ></p>
         </section>
-    </main>
 
-    <footer>
-        <p>&copy; 2026 Mijn Boekenwinkel</p>
-    </footer>
+        <form id="review-formulier" hidden>
+            <h3>Schrijf een review</h3>
 
-    <script src="app.js"></script>
-    </body>
+            <label for="review-score">Score (1 tot 5):</label>
+            <select id="review-score" required>
+                <option value="">Kies een score</option>
+                <option value="1">1/5</option>
+                <option value="2">2/5</option>
+                <option value="3">3/5</option>
+                <option value="4">4/5</option>
+                <option value="5">5/5</option>
+            </select>
+
+            <label for="review-tekst">Je review:</label>
+            <textarea
+                    id="review-tekst"
+                    rows="4"
+                    required
+                    placeholder="Wat vind je van dit boek?"
+            ></textarea>
+
+            <button type="submit">Review plaatsen</button>
+
+            <p
+                    id="review-bericht"
+                    role="status"
+                    aria-live="polite"
+            ></p>
+        </form>
+
+        <button id="terug-knop" type="button">
+            Terug naar boeken
+        </button>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2026 Mijn Boekenwinkel</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
 </html>
