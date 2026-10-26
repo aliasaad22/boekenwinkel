@@ -647,6 +647,17 @@ reserverenKnop.addEventListener("click", async function () {
         return;
     }
 
+    const vandaag = new Date();
+    vandaag.setHours(0, 0, 0, 0);
+
+    const gekozenDatum = new Date(ophaaldatum.value + "T00:00:00");
+
+    if (gekozenDatum < vandaag) {
+        reserveringBericht.textContent =
+            "Kies een ophaaldatum vanaf vandaag.";
+        return;
+    }
+
     const gebruiker = JSON.parse(opgeslagenGebruiker);
 
     const nieuweReservering = {
