@@ -13,7 +13,13 @@ class ReservationServiceTests {
     void bevestigenVanReserveringZonderVoorraadGeeftConflict() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
         BookRepository bookRepository = mock(BookRepository.class);
-        ReservationService service = new ReservationService(reservationRepository, bookRepository);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
+
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
 
         Reservation reservation = new Reservation();
         reservation.setBookId(1L);
@@ -22,8 +28,10 @@ class ReservationServiceTests {
         Book book = new Book();
         book.setStock(0);
 
-        when(reservationRepository.findById(1L)).thenReturn(java.util.Optional.of(reservation));
-        when(bookRepository.findById(1L)).thenReturn(java.util.Optional.of(book));
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
+        when(bookRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(book));
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
@@ -38,13 +46,20 @@ class ReservationServiceTests {
     void betaaldeReserveringKanNietOpnieuwBetaaldWorden() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
         BookRepository bookRepository = mock(BookRepository.class);
-        ReservationService service = new ReservationService(reservationRepository, bookRepository);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
+
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
 
         Reservation reservation = new Reservation();
         reservation.setStatus("CONFIRMED");
         reservation.setPaymentStatus("PAID");
 
-        when(reservationRepository.findById(1L)).thenReturn(java.util.Optional.of(reservation));
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
@@ -59,7 +74,13 @@ class ReservationServiceTests {
     void bevestigenVanReserveringMetVoorraadWerkt() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
         BookRepository bookRepository = mock(BookRepository.class);
-        ReservationService service = new ReservationService(reservationRepository, bookRepository);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
+
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
 
         Reservation reservation = new Reservation();
         reservation.setBookId(1L);
@@ -68,10 +89,14 @@ class ReservationServiceTests {
         Book book = new Book();
         book.setStock(5);
 
-        when(reservationRepository.findById(1L)).thenReturn(java.util.Optional.of(reservation));
-        when(bookRepository.findById(1L)).thenReturn(java.util.Optional.of(book));
-        when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(bookRepository.save(any(Book.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
+        when(bookRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(book));
+        when(reservationRepository.save(any(Reservation.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+        when(bookRepository.save(any(Book.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         Reservation result = service.confirmReservation(1L);
 
@@ -85,13 +110,20 @@ class ReservationServiceTests {
     void bevestigdeReserveringKanNietOpnieuwBevestigdWorden() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
         BookRepository bookRepository = mock(BookRepository.class);
-        ReservationService service = new ReservationService(reservationRepository, bookRepository);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
+
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
 
         Reservation reservation = new Reservation();
         reservation.setBookId(1L);
         reservation.setStatus("CONFIRMED");
 
-        when(reservationRepository.findById(1L)).thenReturn(java.util.Optional.of(reservation));
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
@@ -108,9 +140,16 @@ class ReservationServiceTests {
     void reserveringDieNietBestaatGeeftFout() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
         BookRepository bookRepository = mock(BookRepository.class);
-        ReservationService service = new ReservationService(reservationRepository, bookRepository);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
 
-        when(reservationRepository.findById(99L)).thenReturn(java.util.Optional.empty());
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
+
+        when(reservationRepository.findById(99L))
+                .thenReturn(java.util.Optional.empty());
 
         assertThrows(
                 ResponseStatusException.class,
@@ -125,13 +164,20 @@ class ReservationServiceTests {
     void reserveringKanNietBetaaldWordenVoorBevestiging() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
         BookRepository bookRepository = mock(BookRepository.class);
-        ReservationService service = new ReservationService(reservationRepository, bookRepository);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
+
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
 
         Reservation reservation = new Reservation();
         reservation.setStatus("PENDING");
         reservation.setPaymentStatus("NOT_PAID");
 
-        when(reservationRepository.findById(1L)).thenReturn(java.util.Optional.of(reservation));
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
 
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,
@@ -146,14 +192,22 @@ class ReservationServiceTests {
     void bevestigdeReserveringKanSuccesvolBetaaldWorden() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
         BookRepository bookRepository = mock(BookRepository.class);
-        ReservationService service = new ReservationService(reservationRepository, bookRepository);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
+
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
 
         Reservation reservation = new Reservation();
         reservation.setStatus("CONFIRMED");
         reservation.setPaymentStatus("NOT_PAID");
 
-        when(reservationRepository.findById(1L)).thenReturn(java.util.Optional.of(reservation));
-        when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
+        when(reservationRepository.save(any(Reservation.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         Reservation result = service.markAsPaid(1L);
 
@@ -165,9 +219,16 @@ class ReservationServiceTests {
     void betalingVanReserveringDieNietBestaatGeeftFout() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
         BookRepository bookRepository = mock(BookRepository.class);
-        ReservationService service = new ReservationService(reservationRepository, bookRepository);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
 
-        when(reservationRepository.findById(99L)).thenReturn(java.util.Optional.empty());
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
+
+        when(reservationRepository.findById(99L))
+                .thenReturn(java.util.Optional.empty());
 
         assertThrows(
                 ResponseStatusException.class,
@@ -181,14 +242,22 @@ class ReservationServiceTests {
     void reserveringMetOnbekendBoekKanNietBevestigdWorden() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
         BookRepository bookRepository = mock(BookRepository.class);
-        ReservationService service = new ReservationService(reservationRepository, bookRepository);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
+
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
 
         Reservation reservation = new Reservation();
         reservation.setBookId(99L);
         reservation.setStatus("PENDING");
 
-        when(reservationRepository.findById(1L)).thenReturn(java.util.Optional.of(reservation));
-        when(bookRepository.findById(99L)).thenReturn(java.util.Optional.empty());
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
+        when(bookRepository.findById(99L))
+                .thenReturn(java.util.Optional.empty());
 
         assertThrows(
                 ResponseStatusException.class,
@@ -203,13 +272,20 @@ class ReservationServiceTests {
     void betalingVanReserveringMetOnbekendeStatusWordtGeweigerd() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
         BookRepository bookRepository = mock(BookRepository.class);
-        ReservationService service = new ReservationService(reservationRepository, bookRepository);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
+
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
 
         Reservation reservation = new Reservation();
         reservation.setStatus("PENDING");
         reservation.setPaymentStatus("NOT_PAID");
 
-        when(reservationRepository.findById(1L)).thenReturn(java.util.Optional.of(reservation));
+        when(reservationRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(reservation));
 
         assertThrows(
                 ResponseStatusException.class,

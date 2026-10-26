@@ -18,6 +18,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final BookRepository bookRepository;
+    private final BookUserRepository bookUserRepository;
 
     /**
      * Maakt de service aan met de benodigde repositories.
@@ -27,9 +28,11 @@ public class ReservationService {
      */
     public ReservationService(
             ReservationRepository reservationRepository,
-            BookRepository bookRepository) {
+            BookRepository bookRepository,
+            BookUserRepository bookUserRepository) {
         this.reservationRepository = reservationRepository;
         this.bookRepository = bookRepository;
+        this.bookUserRepository = bookUserRepository;
     }
 
     /**
@@ -66,9 +69,15 @@ public class ReservationService {
             );
         }
         Book book = bookRepository.findById(bookId)
+
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Boek niet gevonden."
+                ));
+        bookUserRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Gebruiker niet gevonden."
                 ));
 
         if (book.getStock() <= 0) {
@@ -181,4 +190,5 @@ public class ReservationService {
     public List<Reservation> getReservationsByUserId(Long userId) {
         return reservationRepository.findByUserId(userId);
     }
+
 }
