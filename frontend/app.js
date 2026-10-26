@@ -54,6 +54,7 @@ const loginBericht =
 const gebruikerStatus = document.querySelector("#gebruiker-status");
 const mijnProfiel = document.querySelector("#mijn-profiel");
 const profielInhoud = document.querySelector("#profiel-inhoud");
+const profielBericht = document.querySelector("#profiel-bericht");
 const gekochteBoeken = document.querySelector("#gekochte-boeken");
 const profielTerugKnop = document.querySelector("#profiel-terug-knop");
 
@@ -521,15 +522,20 @@ profielMenuKnop.addEventListener("click", async function () {
             });
         }
 
-        loginPaneel.hidden = true;
-        registratiePaneel.hidden = true;
+        accountSectie.hidden = true;
+        boekenSectie.hidden = true;
         boekenContainer.hidden = true;
         boekDetails.hidden = true;
+        mijnReserveringenSectie.hidden = true;
         mijnProfiel.hidden = false;
 
+        loginPaneel.hidden = true;
+        registratiePaneel.hidden = true;
     } catch (error) {
         console.error("Fout bij het ophalen van het profiel:", error);
-        alert("Je profiel of gekochte boeken konden niet worden geladen.");
+
+        profielBericht.textContent =
+            "Je profiel of gekochte boeken konden niet worden geladen. Probeer het opnieuw.";
     }
 });
 
