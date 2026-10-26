@@ -4,6 +4,7 @@ package be.ali.boekenwinkel;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import java.time.LocalDate;
 
 import java.util.List;
 
@@ -46,6 +47,24 @@ public class ReservationService {
             Long bookId,
             String pickupDate
     ) {
+        LocalDate vandaag = LocalDate.now();
+        LocalDate gekozenDatum;
+
+        try {
+            gekozenDatum = LocalDate.parse(pickupDate);
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Ongeldige ophaaldatum. Gebruik het formaat JJJJ-MM-DD."
+            );
+        }
+
+        if (gekozenDatum.isBefore(vandaag)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Kies een ophaaldatum vanaf vandaag."
+            );
+        }
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
