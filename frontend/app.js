@@ -526,6 +526,7 @@ profielMenuKnop.addEventListener("click", async function () {
         boekenContainer.hidden = true;
         boekDetails.hidden = true;
         mijnProfiel.hidden = false;
+
     } catch (error) {
         console.error("Fout bij het ophalen van het profiel:", error);
         alert("Je profiel of gekochte boeken konden niet worden geladen.");
@@ -544,7 +545,7 @@ reserveringenMenuKnop.addEventListener("click", async function () {
     boekenSectie.hidden = true;
     boekenContainer.hidden = true;
     boekDetails.hidden = true;
-    mijnProfiel.hidden = false;
+    mijnProfiel.hidden = true;
 
     loginPaneel.hidden = true;
     registratiePaneel.hidden = true;
