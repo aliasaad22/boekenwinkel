@@ -601,11 +601,17 @@ reviewFormulier.addEventListener("submit", async function (event) {
         });
 
         if (!response.ok) {
-            const foutmelding = await response.text();
+            if (response.status === 403) {
+                reviewBericht.textContent =
+                    "Je kunt pas een review schrijven nadat je het boek hebt gekocht.";
+                reviewBericht.className = "bericht-fout";
+                return;
+            }
 
-            throw new Error(
-                "Fout " + response.status + ": " + foutmelding
-            );
+            reviewBericht.textContent =
+                "Je review kon niet worden geplaatst. Probeer het later opnieuw.";
+            reviewBericht.className = "bericht-fout";
+            return;
         }
 
         reviewBericht.textContent =
