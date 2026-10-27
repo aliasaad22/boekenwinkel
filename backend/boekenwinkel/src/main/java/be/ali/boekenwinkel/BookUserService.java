@@ -48,7 +48,7 @@ public class BookUserService {
      *
      * @param user de gebruiker die geregistreerd moet worden
      * @return de opgeslagen gebruiker
-     * @throws EmailAlreadyExistsException als het e-mailadres al bestaat
+     * @throws ResponseStatusException met HTTP-status 409 als het e-mailadres al bestaat
      */
     public BookUser saveUser(BookUser user) {
         if (bookUserRepository.findByEmail(user.getEmail()).isPresent()) {
