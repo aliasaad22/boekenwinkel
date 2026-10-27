@@ -422,11 +422,11 @@ loginFormulier.addEventListener("submit", async function (event) {
 
         loginFormulier.reset();
 
+        loginBericht.textContent = "Je bent succesvol ingelogd.";
+
         toonIngelogdeGebruiker();
         toonAccountStatus();
         toonBoekenlijst();
-
-        loginBericht.textContent = "Je bent succesvol ingelogd.";
     } catch (error) {
         console.error("Fout bij inloggen:", error);
 

@@ -71,8 +71,6 @@
 
                 <button type="submit">Inloggen</button>
             </form>
-
-            <p id="login-bericht" role="status" aria-live="polite"></p>
         </div>
 
         <div id="registratie-paneel" hidden>
@@ -109,9 +107,20 @@
                 <button type="submit">Account aanmaken</button>
             </form>
 
-            <p id="registratie-bericht" role="status" aria-live="polite"></p>
+            <p
+                    id="registratie-bericht"
+                    role="status"
+                    aria-live="polite"
+            ></p>
         </div>
     </section>
+
+    <!-- Loginmelding blijft zichtbaar buiten het loginpaneel. -->
+    <p
+            id="login-bericht"
+            role="status"
+            aria-live="polite"
+    ></p>
 
     <section id="boeken-sectie">
         <h2>Onze boeken</h2>
@@ -122,14 +131,16 @@
         </div>
     </section>
 
-
     <section id="mijn-profiel" hidden>
         <h2>Mijn profiel</h2>
 
-        <p id="profiel-bericht" role="status" aria-live="polite"></p>
+        <p
+                id="profiel-bericht"
+                role="status"
+                aria-live="polite"
+        ></p>
 
         <div id="profiel-inhoud"></div>
-
 
         <h3>Mijn gekochte boeken</h3>
 

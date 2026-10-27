@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/users")
 public class BookUserController {
@@ -65,7 +66,11 @@ public class BookUserController {
         );
     }
     @PostMapping("/login")
-    public BookUserResponse login(@RequestBody BookUser user) {
+    public BookUserResponse login(
+            @RequestBody BookUser user,
+            jakarta.servlet.http.HttpServletRequest request,
+            jakarta.servlet.http.HttpServletResponse response) {
+
         BookUser loggedInUser = bookUserService.login(
                 user.getEmail(),
                 user.getPassword()
@@ -73,6 +78,29 @@ public class BookUserController {
                 HttpStatus.UNAUTHORIZED,
                 "E-mailadres of wachtwoord is onjuist."
         ));
+
+        var authentication =
+                new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                        loggedInUser.getEmail(),
+                        null,
+                        java.util.List.of(
+                                new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_USER")
+                        )
+                );
+
+        var securityContext =
+                org.springframework.security.core.context.SecurityContextHolder.createEmptyContext();
+
+        securityContext.setAuthentication(authentication);
+
+        org.springframework.security.core.context.SecurityContextHolder.setContext(
+                securityContext
+        );
+
+        request.getSession(true).setAttribute(
+                "SPRING_SECURITY_CONTEXT",
+                securityContext
+        );
 
         return new BookUserResponse(
                 loggedInUser.getId(),
