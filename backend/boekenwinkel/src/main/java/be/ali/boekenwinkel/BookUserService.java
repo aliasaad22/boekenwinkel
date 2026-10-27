@@ -52,7 +52,10 @@ public class BookUserService {
      */
     public BookUser saveUser(BookUser user) {
         if (bookUserRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistsException();
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Dit e-mailadres is al in gebruik."
+            );
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));

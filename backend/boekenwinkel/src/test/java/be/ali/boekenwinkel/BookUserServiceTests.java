@@ -159,9 +159,14 @@ class BookUserServiceTests {
         when(bookUserRepository.findByEmail("bestaand@example.com"))
                 .thenReturn(Optional.of(bestaandeGebruiker));
 
-        assertThrows(
-                EmailAlreadyExistsException.class,
+        ResponseStatusException uitzondering = assertThrows(
+                ResponseStatusException.class,
                 () -> bookUserService.saveUser(nieuweGebruiker)
+        );
+
+        assertEquals(
+                409,
+                uitzondering.getStatusCode().value()
         );
 
         verify(bookUserRepository, never())
