@@ -2,15 +2,20 @@
 
 ## 1. Doel
 
-Deze documentatie beschrijft de uitgevoerde tests voor de backend van de boekenwinkel. De tests controleren of de belangrijkste onderdelen correct werken en hoe de applicatie reageert op ongeldige gegevens en uitzonderlijke situaties.
+Deze documentatie beschrijft de uitgevoerde tests voor de backend van de boekenwinkel. De tests controleren de belangrijkste functionaliteiten, waaronder boekenbeheer, reserveringen, beoordelingen en gebruikersbeheer. Daarnaast wordt gecontroleerd hoe de applicatie reageert op ongeldige gegevens en uitzonderlijke situaties.
 
 ## 2. Testresultaat
 
-De bestaande tests zijn uitgevoerd in IntelliJ IDEA.
+De volledige testsuite is uitgevoerd met Maven via de Maven Wrapper.
 
-- **Totaal aantal geslaagde tests:** 31
-- **Totaal aantal mislukte tests:** 0
-- **Resultaat:** alle 31 tests zijn geslaagd.
+- **Totaal aantal uitgevoerde tests:** 38
+- **Aantal geslaagde tests:** 38
+- **Aantal mislukte tests:** 0
+- **Aantal fouten:** 0
+- **Aantal overgeslagen tests:** 0
+- **Resultaat:** alle 38 tests zijn geslaagd.
+
+De testuitvoering is succesvol afgerond met `BUILD SUCCESS`.
 
 ## 3. Overzicht van de testklassen
 
@@ -20,6 +25,7 @@ De bestaande tests zijn uitgevoerd in IntelliJ IDEA.
 | `BookServiceTests` | De werking van de boekfunctionaliteit testen. |
 | `ReservationServiceTests` | De werking van reserveringen, bevestigingen en betalingen testen. |
 | `ReviewServiceTests` | De werking van beoordelingen en de bijbehorende controles testen. |
+| `BookUserServiceTests` | De registratie-, login- en relevante profielfunctionaliteit testen. |
 
 ## 4. Geteste situaties
 
@@ -58,8 +64,21 @@ De beoordelingstests controleren onder andere:
 - Dubbele beoordelingen voorkomen.
 - Een beoordeling verwijderen.
 
+### 4.4 Gebruikersbeheer
+
+De tests van `BookUserServiceTests` controleren onder andere:
+
+- Inloggen met een onbekend e-mailadres.
+- Inloggen met een verkeerd wachtwoord.
+- Succesvol inloggen met correcte gegevens.
+- Omgaan met een gebruiker die niet bestaat bij profiel- en boekopvragingen.
+- Een gebruiker registreren en controleren of het wachtwoord geëncodeerd wordt opgeslagen.
+- Een registratie met een bestaand e-mailadres weigeren.
+
 ## 5. Conclusie
 
-Tijdens de uitgevoerde testreeks zijn alle 31 tests geslaagd. Er waren geen mislukte tests. De bestaande tests controleren belangrijke onderdelen van de boek-, reserverings- en beoordelingsfunctionaliteit.
+De volledige backend-testsuite is succesvol uitgevoerd. Alle 38 tests zijn geslaagd, zonder fouten, mislukte tests of overgeslagen tests.
 
-Er bestaat momenteel geen afzonderlijke testklasse voor `BookUserService`. De registratie-, login- en profielfunctionaliteit wordt daarom in deze documentatie niet als afzonderlijk getest beschouwd.
+De tests controleren belangrijke onderdelen van de boek-, reserverings-, beoordelings- en gebruikersfunctionaliteit. Ze helpen om fouten vroegtijdig op te sporen en geven meer vertrouwen dat de geteste onderdelen correct werken.
+
+De testresultaten bevestigen dat alle uitgevoerde tests slagen. Ze vormen geen garantie dat iedere mogelijke situatie of de volledige applicatie foutloos werkt.
