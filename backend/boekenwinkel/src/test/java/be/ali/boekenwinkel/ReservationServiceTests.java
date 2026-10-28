@@ -267,7 +267,43 @@ class ReservationServiceTests {
         verify(bookRepository, never()).save(any(Book.class));
         verify(reservationRepository, never()).save(any(Reservation.class));
     }
+    @Test
+    void nieuweReserveringWordtAutomatischBevestigdEnVermindertVoorraad() {
+        ReservationRepository reservationRepository = mock(ReservationRepository.class);
+        BookRepository bookRepository = mock(BookRepository.class);
+        BookUserRepository bookUserRepository = mock(BookUserRepository.class);
 
+        ReservationService service = new ReservationService(
+                reservationRepository,
+                bookRepository,
+                bookUserRepository
+        );
+
+        Book book = new Book();
+        book.setStock(5);
+
+        when(bookRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(book));
+        when(bookRepository.save(any(Book.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+        when(bookUserRepository.findById(2L))
+                .thenReturn(java.util.Optional.of(new BookUser()));
+        when(reservationRepository.save(any(Reservation.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Reservation result = service.createReservation(
+                2L,
+                1L,
+                java.time.LocalDate.now().toString()
+        );
+
+        assertEquals("CONFIRMED", result.getStatus());
+        assertEquals("NOT_PAID", result.getPaymentStatus());
+        assertEquals(4, book.getStock());
+
+        verify(bookRepository).save(book);
+        verify(reservationRepository).save(result);
+    }
     @Test
     void betalingVanReserveringMetOnbekendeStatusWordtGeweigerd() {
         ReservationRepository reservationRepository = mock(ReservationRepository.class);
