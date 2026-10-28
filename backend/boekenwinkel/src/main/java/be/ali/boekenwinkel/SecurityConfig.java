@@ -64,6 +64,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/reviews/**").permitAll()
                         .requestMatchers("/users", "/users/login").permitAll()
                         .requestMatchers("/users/**").authenticated()
+                        .requestMatchers("/reservations", "/reservations/**").permitAll()
 
                         .anyRequest().authenticated()
                 );
