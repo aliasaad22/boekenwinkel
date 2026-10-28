@@ -71,14 +71,15 @@ function toonAccountPaneel(paneel) {
     registratiePaneel.hidden = paneel !== "registratie";
     ingelogdePaneel.hidden = true;
 }
+
 loginMenuKnop.addEventListener("click", function () {
     toonAccountPaneel("login");
 });
 
-
 registratieMenuKnop.addEventListener("click", function () {
     toonAccountPaneel("registratie");
 });
+
 function toonIngelogdeGebruiker() {
     const opgeslagenGebruiker =
         sessionStorage.getItem("ingelogdeGebruiker");
@@ -117,6 +118,7 @@ function toonBoekenlijst() {
 
     boekenContainer.hidden = false;
 }
+
 boekenMenuKnop.addEventListener("click", function () {
     toonBoekenlijst();
 });
@@ -252,8 +254,6 @@ async function laadBoeken() {
 
                 loginPaneel.hidden = true;
                 registratiePaneel.hidden = true;
-
-
 
                 accountSectie.hidden = true;
                 boekenSectie.hidden = true;
@@ -460,7 +460,10 @@ profielMenuKnop.addEventListener("click", async function () {
     try {
         const profielResponse = await fetch(
             "http://localhost:8080/users/" +
-            gebruiker.id + "/profile"
+            gebruiker.id + "/profile",
+            {
+                credentials: "include"
+            }
         );
 
         if (!profielResponse.ok) {
@@ -482,7 +485,10 @@ profielMenuKnop.addEventListener("click", async function () {
 
         const boekenResponse = await fetch(
             "http://localhost:8080/users/" +
-            gebruiker.id + "/purchased-books"
+            gebruiker.id + "/purchased-books",
+            {
+                credentials: "include"
+            }
         );
 
         if (!boekenResponse.ok) {
@@ -555,9 +561,6 @@ reserveringenMenuKnop.addEventListener("click", async function () {
     mijnReserveringen.innerHTML = "";
     mijnReserveringenBericht.textContent = "";
 
-
-
-
     await laadMijnReserveringen();
 });
 
@@ -590,6 +593,7 @@ reviewFormulier.addEventListener("submit", async function (event) {
     try {
         const response = await fetch("http://localhost:8080/reviews", {
             method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -679,6 +683,7 @@ reserverenKnop.addEventListener("click", async function () {
             "http://localhost:8080/reservations",
             {
                 method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -699,6 +704,8 @@ reserverenKnop.addEventListener("click", async function () {
             "Je reservering is aangemaakt!";
 
         ophaaldatum.value = "";
+
+        await laadMijnReserveringen();
     } catch (error) {
         console.error("Fout bij reserveren:", error);
         reserveringBericht.textContent = error.message;
@@ -719,8 +726,6 @@ async function laadMijnReserveringen() {
         return;
     }
 
-    const gebruiker = JSON.parse(opgeslagenGebruiker);
-
     try {
         const response = await fetch(
             "http://localhost:8080/reservations",
@@ -729,6 +734,7 @@ async function laadMijnReserveringen() {
                 credentials: "include"
             }
         );
+
         if (!response.ok) {
             throw new Error(
                 "De reserveringen konden niet worden opgehaald."
@@ -790,7 +796,8 @@ async function laadMijnReserveringen() {
                             "http://localhost:8080/reservations/" +
                             reservering.id + "/pay",
                             {
-                                method: "PUT"
+                                method: "PUT",
+                                credentials: "include"
                             }
                         );
 
