@@ -723,13 +723,12 @@ async function laadMijnReserveringen() {
 
     try {
         const response = await fetch(
-            "http://localhost:8080/reservations/user/" + gebruiker.id,
+            "http://localhost:8080/reservations",
             {
                 method: "GET",
                 credentials: "include"
             }
         );
-
         if (!response.ok) {
             throw new Error(
                 "De reserveringen konden niet worden opgehaald."
