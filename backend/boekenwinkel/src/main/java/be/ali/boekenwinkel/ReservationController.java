@@ -68,8 +68,27 @@ public class ReservationController {
     }
 
     @GetMapping
-    public List<Reservation> getAllReservations() {
-        return reservationService.getAllReservations();
+    public List<Reservation> getMyReservations(
+            Authentication authentication) {
+
+        if (authentication == null
+                || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Je moet ingelogd zijn om reserveringen te bekijken."
+            );
+        }
+
+        BookUser ingelogdeGebruiker = bookUserService
+                .getUserByEmail(authentication.getName())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        "De ingelogde gebruiker werd niet gevonden."
+                ));
+
+        return reservationService.getReservationsByUserId(
+                ingelogdeGebruiker.getId()
+        );
     }
 
     @PutMapping("/{id}/pay")
