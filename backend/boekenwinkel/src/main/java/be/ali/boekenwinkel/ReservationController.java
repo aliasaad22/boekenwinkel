@@ -92,9 +92,36 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}/pay")
-    public Reservation markAsPaid(@PathVariable Long id) {
+    public Reservation markAsPaid(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Je moet ingelogd zijn om te betalen."
+            );
+        }
+
+        BookUser ingelogdeGebruiker = bookUserService
+                .getUserByEmail(authentication.getName())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        "De ingelogde gebruiker werd niet gevonden."
+                ));
+
+        Reservation reservation = reservationService.getReservationById(id);
+
+        if (!ingelogdeGebruiker.getId().equals(reservation.getUserId())) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Je mag alleen je eigen reserveringen betalen."
+            );
+        }
+
         return reservationService.markAsPaid(id);
     }
+
 
 
 }

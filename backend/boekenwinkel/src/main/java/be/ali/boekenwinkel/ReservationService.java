@@ -20,6 +20,14 @@ public class ReservationService {
     private final BookRepository bookRepository;
     private final BookUserRepository bookUserRepository;
 
+    public Reservation getReservationById(Long reservationId) {
+        return reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Reservering niet gevonden."
+                ));
+    }
+
     /**
      * Maakt de service aan met de benodigde repositories.
      *
