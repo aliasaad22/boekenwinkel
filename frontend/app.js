@@ -390,16 +390,12 @@ loginFormulier.addEventListener("submit", async function (event) {
     loginBericht.textContent = "";
 
     try {
-        const response = await fetch(
-            "http://localhost:8080/users/login",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(gebruiker)
-            }
-        );
+        const response = await fetch("http://localhost:8080/users/login", {
+            method: "POST",
+            credentials: "include",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(gebruiker)
+        });
 
         if (!response.ok) {
             if (response.status === 401) {
@@ -727,7 +723,11 @@ async function laadMijnReserveringen() {
 
     try {
         const response = await fetch(
-            "http://localhost:8080/reservations/user/" + gebruiker.id
+            "http://localhost:8080/reservations/user/" + gebruiker.id,
+            {
+                method: "GET",
+                credentials: "include"
+            }
         );
 
         if (!response.ok) {
