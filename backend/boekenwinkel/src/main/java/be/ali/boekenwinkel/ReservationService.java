@@ -100,6 +100,14 @@ public class ReservationService {
         reservation.setBookId(bookId);
         reservation.setPickupDate(pickupDate);
 
+
+        reservation.setStatus("CONFIRMED");
+
+
+        book.setStock(book.getStock() - 1);
+        bookRepository.save(book);
+
+
         return reservationRepository.save(reservation);
     }
 
