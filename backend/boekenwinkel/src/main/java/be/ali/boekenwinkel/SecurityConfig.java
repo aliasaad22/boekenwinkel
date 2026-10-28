@@ -60,7 +60,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/books", "/books/**").permitAll()
-                        .requestMatchers("/users", "/users/**").permitAll()
+                        .requestMatchers("/users", "/users/login").permitAll()
+                        .requestMatchers("/users/**").authenticated()
                         .anyRequest().authenticated()
                 );
 
