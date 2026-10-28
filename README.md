@@ -2,54 +2,81 @@
 
 ## 1. Beschrijving
 
-Boekenwinkel is een webapplicatie voor een online boekenwinkel. Gebruikers kunnen het beschikbare boekenaanbod bekijken, een account aanmaken, zich aanmelden, reserveringen beheren en reviews over boeken lezen en toevoegen.
+Boekenwinkel is een webapplicatie voor een online boekenwinkel. Gebruikers kunnen het beschikbare boekenaanbod bekijken, een account aanmaken, aanmelden, boeken reserveren, de betalingsstatus opvolgen en reviews bekijken of toevoegen.
 
-De applicatie bestaat uit een backend die verantwoordelijk is voor de verwerking en opslag van gegevens en een frontend waarmee gebruikers met de applicatie kunnen werken. De gegevens worden opgeslagen in een MySQL-database.
+De applicatie bestaat uit een frontend, een backend en een MySQL-database. De frontend biedt de gebruikersinterface aan. De backend verwerkt aanvragen, voert bedrijfslogica uit en communiceert met de database.
 
-Dit project werd ontwikkeld als onderdeel van de opleiding **Graduaat Programmeren aan Erasmushogeschool Brussel**.
+Dit project werd ontwikkeld in het kader van de opleiding **Graduaat Programmeren aan Erasmushogeschool Brussel**.
+
+**GitHub-repository:** https://github.com/aliasaad22/boekenwinkel
 
 ## 2. Functionaliteiten
 
-De applicatie ondersteunt de volgende functionaliteiten:
+De applicatie bevat de volgende functionaliteiten:
 
+### Boeken
 - Boeken opvragen en bekijken.
-- Boekgegevens beheren via de backend-API.
-- Gebruikers registreren en aanmelden.
-- Wachtwoorden veilig hashen met Spring Security Crypto.
-- Reserveringen aanmaken en beheren.
-- Reserveringen bevestigen en betalingen registreren.
-- Reviews toevoegen, bekijken en verwijderen.
-- Scores van reviews valideren.
-- Gemiddelde reviewscores van boeken opvragen.
-- Gegevens opslaan en ophalen uit een MySQL-database.
-- Backendfunctionaliteiten aanbieden via REST-endpoints.
+- Boekgegevens ophalen via de backend-API.
+- Boekgegevens bewaren in de MySQL-database.
+- De beschikbare voorraad opvolgen.
 
-De beschikbare functionaliteiten en toegangsregels worden verder beschreven in de API-documentatie.
+### Gebruikers
+- Een gebruikersaccount aanmaken.
+- Aanmelden bij de applicatie.
+- Wachtwoorden hashen met Spring Security Crypto.
+
+### Reserveringen en betalingen
+- Een reservering aanmaken voor een boek.
+- De status van een reservering opvolgen.
+- Een reservering bevestigen.
+- De beschikbare voorraad verminderen wanneer een reservering wordt aangemaakt.
+- De betalingsstatus opvolgen.
+- Een betaling registreren nadat de reservering bevestigd is.
+
+### Reviews
+- Een review voor een boek toevoegen.
+- Reviews van een boek bekijken.
+- De gemiddelde score van een boek opvragen.
+- Een review verwijderen.
+- Scores valideren en ongeldige scores weigeren.
+- Controleren of aan de voorwaarden voor het toevoegen van een review is voldaan.
+
+De concrete API-endpoints, verzoekgegevens, antwoorden en HTTP-statuscodes zijn beschreven in `docs/API-DOCUMENTATIE.md`.
 
 ## 3. Gebruikte technologieën
 
 ### Backend
 
-- **Java 21** — programmeertaal.
-- **Spring Boot** — framework voor de backendapplicatie.
-- **Spring Web** — ondersteuning voor webfunctionaliteiten en REST-endpoints.
-- **Spring Data JPA** — toegang tot en beheer van databasegegevens.
-- **Hibernate** — ORM-technologie voor de koppeling tussen Java-objecten en databasetabellen.
-- **MySQL** — relationele database.
-- **Maven** — beheer van dependencies en het bouwen en testen van het project.
-- **Maven Wrapper** — maakt het mogelijk Maven-opdrachten uit te voeren zonder een afzonderlijke Maven-installatie.
-- **Spring Security Crypto** — ondersteuning voor het hashen van wachtwoorden.
+| Technologie | Doel |
+|---|---|
+| Java 21 | Programmeertaal voor de backend |
+| Spring Boot | Opbouw en uitvoering van de backend |
+| Spring Web / Spring MVC | Verwerken van HTTP-verzoeken en REST-endpoints |
+| Spring Data JPA | Toegang tot databasegegevens via repositories |
+| Hibernate | Koppeling tussen Java-objecten en databasetabellen |
+| MySQL | Relationele database voor de applicatiegegevens |
+| Maven | Beheren van dependencies, bouwen en testen |
+| Maven Wrapper | Maven-opdrachten uitvoeren zonder een afzonderlijke Maven-installatie |
+| Spring Security Crypto | Hashen van wachtwoorden |
 
 ### Frontend
 
-- **HTML** — structuur van de webpagina.
-- **CSS** — opmaak en vormgeving.
-- **JavaScript** — interactie en verwerking aan de clientzijde.
-- **Fetch API** — communicatie tussen de frontend en de backend via HTTP-verzoeken.
+| Technologie | Doel |
+|---|---|
+| HTML | Structuur van de webpagina |
+| CSS | Vormgeving van de gebruikersinterface |
+| JavaScript | Interactie en verwerking aan de clientzijde |
+| Fetch API | HTTP-verzoeken versturen naar de backend |
+
+### Testen
+
+De backend bevat tests voor onder andere de boek-, gebruikers-, reserverings- en reviewfunctionaliteiten. De tests worden uitgevoerd met de Maven Wrapper.
+
+De actuele testresultaten zijn te controleren met de instructies in hoofdstuk 8.
 
 ## 4. Projectstructuur
 
-Het project is als volgt georganiseerd:
+De repository is als volgt georganiseerd:
 
 ```text
 boekenwinkel/
@@ -60,6 +87,8 @@ boekenwinkel/
 │       ├── mvnw.cmd
 │       ├── pom.xml
 │       └── src/
+│           ├── main/
+│           └── test/
 ├── frontend/
 │   ├── index.html
 │   ├── app.js
@@ -71,62 +100,64 @@ boekenwinkel/
 └── README.md
 ```
 
-**Toelichting:**
+### Toelichting
 
 - `backend/boekenwinkel/` bevat de Java- en Spring Boot-backend.
-- `pom.xml` beschrijft de Maven-configuratie en de dependencies.
-- `mvnw` en `mvnw.cmd` zijn de Maven Wrapper-bestanden voor respectievelijk Unix-gebaseerde systemen en Windows.
+- `src/main/` bevat de applicatiecode en configuratie.
+- `src/test/` bevat de backendtests.
+- `pom.xml` beschrijft de Maven-configuratie en dependencies.
+- `mvnw` en `mvnw.cmd` zijn de Maven Wrapper-scripts voor Unix-gebaseerde systemen en Windows.
 - `frontend/` bevat de HTML-, CSS- en JavaScript-bestanden.
-- `docs/PLANNING.md` beschrijft de planning van het project.
-- `docs/API-DOCUMENTATIE.md` beschrijft de backend-endpoints, verzoeken en antwoorden.
-- `docs/TESTDOCUMENTATIE.md` bevat de testresultaten en testinformatie.
-- `README.md` bevat de algemene informatie en instructies om het project uit te voeren.
+- `docs/PLANNING.md` beschrijft de projectplanning.
+- `docs/API-DOCUMENTATIE.md` beschrijft de API-endpoints.
+- `docs/TESTDOCUMENTATIE.md` beschrijft de tests en hun resultaten.
+- `README.md` bevat de algemene projectinformatie en de installatie- en uitvoerinstructies.
 
 ## 5. Vereisten
 
-Om het project lokaal te installeren en uit te voeren, heb je het volgende nodig:
+Om het project lokaal uit te voeren, heb je nodig:
 
 - Java JDK 21.
 - MySQL Server.
-- Git, om de repository te downloaden.
+- Git.
 - Een moderne webbrowser.
-- Een terminal, zoals PowerShell op Windows.
+- Een terminal, bijvoorbeeld PowerShell op Windows.
 
-Het project bevat een Maven Wrapper. Daarom hoef je Maven niet afzonderlijk te installeren. Bij het eerste gebruik kan de Wrapper de vereiste Maven-versie downloaden.
+Een afzonderlijke Maven-installatie is niet nodig, omdat het project een Maven Wrapper bevat.
 
 ## 6. Installatie en configuratie
 
-### 6.1. De repository downloaden
+### 6.1. Repository downloaden
 
-Open een terminal en voer de volgende opdrachten uit:
+Open een terminal en voer uit:
 
 ```bash
 git clone https://github.com/aliasaad22/boekenwinkel.git
 cd boekenwinkel
 ```
 
-De volledige projectmap wordt nu lokaal aangemaakt.
+De repository wordt nu lokaal gedownload.
 
-### 6.2. MySQL starten
+### 6.2. MySQL configureren
 
-Controleer of MySQL Server actief is en of je toegang hebt tot de MySQL-server.
+Start MySQL Server en meld je aan met een MySQL-account dat databases en gebruikers mag beheren.
 
-Meld je aan met een MySQL-account dat databases en gebruikers mag beheren.
-
-Maak de database aan als die nog niet bestaat:
+Maak de database aan als deze nog niet bestaat:
 
 ```sql
 CREATE DATABASE IF NOT EXISTS boekenwinkel;
 ```
 
-De backend gebruikt de databasegebruiker `boekenwinkel_app`. Maak deze gebruiker aan als die nog niet bestaat:
+De backend moet vervolgens met deze database kunnen verbinden. Gebruik de database-instellingen die in `backend/boekenwinkel/src/main/resources/application.properties` staan.
+
+Als je met een afzonderlijke databasegebruiker werkt, kun je die aanmaken met:
 
 ```sql
 CREATE USER IF NOT EXISTS 'boekenwinkel_app'@'localhost'
-IDENTIFIED BY 'KIES_EEN_WACHTWOORD';
+IDENTIFIED BY 'KIES_EEN_STERK_WACHTWOORD';
 ```
 
-Geef de gebruiker toegang tot de database:
+Geef die gebruiker toegang tot de projectdatabase:
 
 ```sql
 GRANT ALL PRIVILEGES ON boekenwinkel.*
@@ -135,17 +166,19 @@ TO 'boekenwinkel_app'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-Vervang `KIES_EEN_WACHTWOORD` door een sterk wachtwoord.
+Vervang het voorbeeldwachtwoord door een eigen sterk wachtwoord.
 
-**Belangrijk:** als de databasegebruiker al bestaat, wordt het bestaande wachtwoord door `CREATE USER IF NOT EXISTS` niet automatisch gewijzigd. Zorg ervoor dat het wachtwoord overeenkomt met de configuratie van de backend.
+**Let op:** gebruik deze databasegebruikersnaam alleen wanneer die overeenkomt met je backendconfiguratie. Als de configuratie een andere gebruiker gebruikt, moet je de SQL-opdrachten en de configuratie op elkaar afstemmen.
 
-### 6.3. De databaseverbinding configureren
+### 6.3. Databaseverbinding instellen
 
-Open het configuratiebestand:
+Open het bestand:
 
 `backend/boekenwinkel/src/main/resources/application.properties`
 
-Controleer of de databaseverbinding correct ingesteld is:
+Controleer of de database-URL, gebruikersnaam en het wachtwoord overeenkomen met je MySQL-configuratie.
+
+Een voorbeeld van een configuratie is:
 
 ```properties
 spring.application.name=boekenwinkel
@@ -158,41 +191,41 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 ```
 
-Vervang `JOUW_WACHTWOORD` door het wachtwoord van de MySQL-gebruiker.
+Gebruik de bestaande projectconfiguratie als uitgangspunt en vervang de voorbeeldgegevens waar nodig.
 
 De belangrijkste instellingen zijn:
 
-- `spring.datasource.url` bepaalt met welke database de backend verbinding maakt.
-- `spring.datasource.username` bepaalt welke databasegebruiker wordt gebruikt.
-- `spring.datasource.password` bevat het wachtwoord van die gebruiker.
-- `spring.jpa.hibernate.ddl-auto=update` laat Hibernate het databaseschema aanpassen aan de JPA-entiteiten.
-- `spring.jpa.show-sql=true` toont SQL-verzoeken in de console.
+- `spring.datasource.url`: bepaalt met welke database de backend verbinding maakt.
+- `spring.datasource.username`: bepaalt welke MySQL-gebruiker wordt gebruikt.
+- `spring.datasource.password`: bevat het wachtwoord van die gebruiker.
+- `spring.jpa.hibernate.ddl-auto=update`: laat Hibernate het databaseschema tijdens de ontwikkeling aanpassen aan de JPA-entiteiten.
+- `spring.jpa.show-sql=true`: toont SQL-verzoeken in de console.
 
-De instelling `ddl-auto=update` is handig tijdens de ontwikkeling. Voor een productieomgeving is een gecontroleerde database-migratiestrategie aanbevolen.
+De instelling `ddl-auto=update` is handig tijdens de ontwikkeling. Voor productie is een gecontroleerde strategie voor databasewijzigingen aanbevolen.
 
-**Beveiliging:** plaats geen echte wachtwoorden of andere geheimen in een publieke GitHub-repository. Gebruik voor een gedeelde of productieomgeving een geschikte manier om configuratiegeheimen buiten de broncode te bewaren.
+**Beveiliging:** commit geen echte wachtwoorden of andere geheimen naar GitHub. Bewaar vertrouwelijke configuratiegegevens buiten de broncode.
 
 ## 7. De applicatie starten
 
-### 7.1. De backend starten op Windows
+### 7.1. Backend starten op Windows
 
 Open PowerShell of de terminal in IntelliJ IDEA.
 
-Navigeer vanuit de hoofdmap van het project naar de backendmap:
+Navigeer naar de backendmap:
 
 ```powershell
 cd backend\boekenwinkel
 ```
 
-Start vervolgens Spring Boot:
+Start de applicatie:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-Wacht totdat Spring Boot aangeeft dat de applicatie gestart is. Controleer de console op fouten met betrekking tot Java, MySQL of de configuratie.
+Wacht totdat Spring Boot aangeeft dat de applicatie gestart is. Controleer de console als er problemen zijn met Java, MySQL of de configuratie.
 
-### 7.2. De backend starten op Linux of macOS
+### 7.2. Backend starten op Linux of macOS
 
 Navigeer naar de backendmap:
 
@@ -200,13 +233,13 @@ Navigeer naar de backendmap:
 cd backend/boekenwinkel
 ```
 
-Voer daarna uit:
+Start de applicatie:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-Als de wrapper niet uitvoerbaar is, kun je indien nodig eerst de uitvoerrechten instellen:
+Als het script geen uitvoerrechten heeft, kun je die indien nodig instellen:
 
 ```bash
 chmod +x mvnw
@@ -218,30 +251,32 @@ Basisadres:
 
 `http://localhost:8080`
 
-De basis-URL is niet noodzakelijk een webpagina. Gebruik de endpoints uit `docs/API-DOCUMENTATIE.md` om de beschikbare API-functionaliteiten te testen.
+Dit basisadres hoeft geen aparte webpagina te tonen. Gebruik de endpoints uit `docs/API-DOCUMENTATIE.md` om de API te testen.
 
-### 7.3. De frontend openen
+### 7.3. Frontend openen
 
-Open het bestand `frontend/index.html` in een moderne webbrowser of gebruik een lokale ontwikkelserver.
+Open `frontend/index.html` in een browser of gebruik een lokale ontwikkelserver.
 
-De frontend communiceert met de backend via de Fetch API. Zorg ervoor dat de backend actief is voordat je functionaliteiten gebruikt waarvoor gegevens uit de database nodig zijn.
+De frontend verstuurt HTTP-verzoeken naar de backend met de Fetch API. De backend moet actief zijn wanneer je functies gebruikt die gegevens uit de database nodig hebben.
 
-Als de browser verzoeken naar de backend blokkeert, controleer dan de CORS-configuratie en gebruik een geschikte lokale webserver.
+De lokale frontend moet bereikbaar zijn vanaf een oorsprong die door de CORS-configuratie van de backend wordt toegestaan. Controleer die configuratie wanneer de browser verzoeken blokkeert.
+
+In de ontwikkelomgeving werd de frontend onder andere via `localhost:63342` gebruikt.
 
 ## 8. Tests uitvoeren
 
-De backendtests kunnen met de Maven Wrapper worden uitgevoerd.
+De backendtests kunnen worden uitgevoerd met de Maven Wrapper.
 
-Open een tweede terminal en navigeer naar de backendmap.
+### Windows
 
-Op Windows:
+Open een tweede terminal en voer uit:
 
 ```powershell
 cd backend\boekenwinkel
 .\mvnw.cmd test
 ```
 
-Op Linux of macOS:
+### Linux of macOS
 
 ```bash
 cd backend/boekenwinkel
@@ -250,22 +285,26 @@ cd backend/boekenwinkel
 
 Maven voert de beschikbare tests uit en toont de resultaten in de terminal.
 
-Controleer de uitvoer op:
+Controleer:
 
 - Het aantal uitgevoerde tests.
 - Het aantal geslaagde tests.
-- Eventuele fouten of mislukte tests.
-- De uiteindelijke Maven-buildstatus.
+- Het aantal fouten en mislukte tests.
+- De uiteindelijke buildstatus.
 
-Een succesvolle build is een indicatie dat de uitgevoerde tests geslaagd zijn, maar betekent niet automatisch dat iedere mogelijke gebruikerssituatie getest is.
+Bij een recente lokale testuitvoering werden **39 tests uitgevoerd zonder fouten of mislukte tests**, met als resultaat `BUILD SUCCESS`.
 
-Raadpleeg `docs/TESTDOCUMENTATIE.md` voor de gedocumenteerde testresultaten.
+Voer de tests opnieuw uit wanneer de code verandert. De testresultaten kunnen namelijk veranderen na nieuwe wijzigingen.
+
+Raadpleeg `docs/TESTDOCUMENTATIE.md` voor de gedocumenteerde testresultaten. Zorg ervoor dat het aantal tests en de resultaten in dat document overeenkomen met de laatste testuitvoering.
+
+Een geslaagde testuitvoering betekent niet automatisch dat iedere mogelijke gebruikerssituatie getest is.
 
 ## 9. API-documentatie
 
-De backend biedt REST-endpoints waarmee de frontend gegevens kan opvragen en bewerken.
+De backend stelt REST-endpoints beschikbaar voor de verschillende onderdelen van de applicatie.
 
-De volledige endpointdocumentatie staat in:
+De volledige documentatie staat in:
 
 `docs/API-DOCUMENTATIE.md`
 
@@ -277,43 +316,46 @@ Deze documentatie beschrijft onder andere:
 - Reviews.
 - Verwachte verzoekgegevens en antwoorden.
 - Relevante HTTP-statuscodes.
-- Beveiligingsaandachtspunten.
+- Toegangsregels en beveiligingsaandachtspunten.
 
-Gebruik deze documentatie om de API te testen met een geschikt HTTP-testprogramma of vanuit de frontend.
+Gebruik de documentatie om de API te testen met een geschikt HTTP-testprogramma of vanuit de frontend.
 
-## 10. Planning en testdocumentatie
+## 10. Planning en documentatie
 
 De projectdocumentatie staat in de map `docs/`.
 
-| Bestand | Inhoud |
+| Bestand | Beschrijving |
 |---|---|
-| `docs/PLANNING.md` | Projectdoel, technologieën, fasen en kwaliteitscriteria. |
-| `docs/API-DOCUMENTATIE.md` | Beschrijving van de backend-endpoints en HTTP-statuscodes. |
-| `docs/TESTDOCUMENTATIE.md` | Gedocumenteerde tests en testresultaten. |
+| `docs/PLANNING.md` | Projectdoel, planning, fasen en kwaliteitscriteria |
+| `docs/API-DOCUMENTATIE.md` | Backend-endpoints, verzoeken, antwoorden en statuscodes |
+| `docs/TESTDOCUMENTATIE.md` | Tests en testresultaten |
 
-Deze documenten vullen de README aan en geven meer informatie over de ontwikkeling, werking en controle van het project.
+Samen met de broncode geven deze documenten een overzicht van de ontwikkeling, werking en controle van het project.
 
-## 11. Beveiliging en aandachtspunten
+## 11. Beveiliging en beperkingen
 
-De applicatie gebruikt Spring Security Crypto voor het hashen van wachtwoorden. Wachtwoorden horen niet als gewone tekst in de database opgeslagen te worden.
+De applicatie gebruikt Spring Security Crypto voor het hashen van wachtwoorden. Hierdoor hoeven wachtwoorden niet als gewone tekst opgeslagen te worden.
 
-De huidige beveiligingsconfiguratie laat de beschreven boeken-, gebruikers-, reserverings- en review-endpoints publiek toegankelijk zijn. Dit is een belangrijk aandachtspunt: het hashen van wachtwoorden betekent niet dat de API automatisch beschermd is.
+Het hashen van wachtwoorden is echter niet hetzelfde als het beveiligen van alle API-endpoints.
 
-Voor een productieomgeving zijn onder andere de volgende verbeteringen aanbevolen:
+De huidige beveiligingsconfiguratie laat bepaalde endpoints voor boeken, gebruikers, reserveringen en reviews publiek toegankelijk zijn. Daardoor is de applicatie niet zonder verdere controle geschikt voor productiegebruik.
+
+Mogelijke verbeteringen voor een productieomgeving zijn:
 
 - Geschikte authenticatie en autorisatie implementeren.
-- Controleren welke gebruiker een reservering of review mag beheren.
+- Controleren of een gebruiker een bepaalde reservering of review mag beheren.
 - Vertrouwelijke configuratiegegevens buiten de broncode bewaren.
 - Invoer aan de backend valideren.
-- Foutmeldingen controleren zodat ze geen gevoelige informatie blootgeven.
-- HTTPS gebruiken in een productieomgeving.
-- Een gecontroleerde strategie gebruiken voor database-migraties en back-ups.
+- Foutmeldingen controleren op onbedoelde blootstelling van gevoelige informatie.
+- HTTPS gebruiken.
+- Databasewijzigingen via een gecontroleerde migratiestrategie beheren.
+- Regelmatig back-ups maken en herstel testen.
 
-De bestaande functionaliteiten en configuratie moeten worden beoordeeld voordat de applicatie als productiegeschikt wordt beschouwd.
+Deze aandachtspunten beschrijven mogelijke verdere verbeteringen en betekenen niet dat al deze functies momenteel geïmplementeerd zijn.
 
 ## 12. Bronnen en AI-ondersteuning
 
-Tijdens de ontwikkeling zijn technische documentatie en ontwikkelhulpmiddelen gebruikt.
+Tijdens de ontwikkeling werden technische documentatie en ontwikkelhulpmiddelen gebruikt.
 
 ### Technische bronnen
 
@@ -324,20 +366,10 @@ Tijdens de ontwikkeling zijn technische documentatie en ontwikkelhulpmiddelen ge
 - [Git-documentatie](https://git-scm.com/doc/)
 - [Maven-documentatie](https://maven.apache.org/guides/)
 
-### Gebruik van AI
 
-ChatGPT werd gebruikt als ondersteunend hulpmiddel tijdens de ontwikkeling. De ondersteuning omvatte onder andere:
-
-- Het begrijpen van programmeerconcepten.
-- Het analyseren en oplossen van programmeerfouten.
-- Het ondersteunen bij het schrijven en controleren van tests.
-- Het verbeteren van technische documentatie.
-- Het verduidelijken van Spring Boot-, Java- en databaseconcepten.
-
-Voorgestelde wijzigingen werden tijdens de ontwikkeling gecontroleerd en getest waar van toepassing. Deze vermelding beschrijft het gebruik van AI als hulpmiddel en vervangt niet de eigen controle, het begrip en de verantwoordelijkheid van de ontwikkelaar voor de ingediende code.
 
 ## 13. Auteur en project
 
-Dit project werd ontwikkeld in het kader van de opleiding Graduaat Programmeren aan Erasmushogeschool Brussel.
+Dit project werd ontwikkeld in het kader van de opleiding **Graduaat Programmeren aan Erasmushogeschool Brussel**.
 
-GitHub-repository: [aliasaad22/boekenwinkel](https://github.com/aliasaad22/boekenwinkel)
+**GitHub-repository:** https://github.com/aliasaad22/boekenwinkel
